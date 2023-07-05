@@ -1,0 +1,21 @@
+{% include 'navbar.html' %} 
+
+{% block content %}
+<div class="detalle">
+    <h1>Detalle Reserva</h1>
+
+    <p><strong>Cliente: </strong>{{ reserva.cliente.apellido_nombre }}</p>
+    <p><strong>Complejo: </strong>{{ reserva.complejo }}</p>
+    <p><strong>Cabaña: </strong>{{ reserva.cabania }}</p>
+    <p><strong>Día de Entrada: </strong>{{ reserva.diaEntrada }}</p>
+    <p><strong>Día de Salida: </strong>{{ reserva.diaSalida }}</p>
+    <p><strong>Seña: </strong>{{ reserva.seña }}</p>
+    <p><strong>Precio: </st>{{ reserva.precio }}</p>    
+        
+    
+
+
+</div>
+
+
+{% endblock %} 

@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root{
+    --font-family: 'poppins' sans-serif ;
+    --color-primary: #6C9BCF;
+    --color-danger: #FF0060;
+    --color-success: #1B9C85;
+    --color-warning: #F7D060;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-dark: #363949;
+    --color-light: rgba(132, 139, 200, 0.18);
+    --color-dark-variant: #677483;
+    --color-background: #f6f6f9;
+
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 1.2rem;
+
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+
+    --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+}
+
+nav{
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar{
+    color: var(--color-background);
+    border-radius: var(--border-radius-1);
+}
+
+
+.navbar :hover{
+    color: var(--color-danger);
+    transition: all 0.3s ease;
+    box-shadow: var(--box-shadow);
+}
+
+header{
+    background-color: var(--color-background);
+    color: var(--color-dark);
+    margin: 0rem;
+    height: 3.125rem;
+}
+
+.contenedor-tablas{
+    display: flex;
+}
+
+.titulo{
+    color: var(--color-danger);
+    text-align: center;
+    font-family: var(--font-family);
+}
+
+.table-hover tbody tr:hover{
+    color: var(--color-danger);
+}
+
+.table-striped tbody a{
+    color: var(--color-dark);
+}
+
+.table-striped tbody a:hover{
+    color: var(--color-danger);
+    transition: all 0.3s ease;
+}
+
+footer{
+    background-color: #263409;
+    color: #D61A46; 
+    position:fixed;
+    bottom: 0;
+    width: 100vw;
+}
+
+.detalle{
+    background-color: var(--color-white);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
+    height: 70vh;
+    width: 30vw;
+    margin: auto;
+}
+
+.detalle  h2, p{
+    color: var(--color-dark);
+    text-align: center;
+    
+}
+
+.detalle h1{
+    color: var(--color-danger);
+    text-align: center;
+}
+
+.detalle  h2, p:hover{
+    color: var(--color-dark-variant);
+}
+
+.detalle:hover{
+    box-shadow: var(--box-shadow);
+}
+
+body::-webkit-scrollbar{
+    width: 0.40rem;
+}
+
+body::-webkit-scrollbar-track{
+    background-color: var(--color-dark);
+}
+
+body::-webkit-scrollbar-thumb{
+    background-color: var(--color-danger);
+}
+
+

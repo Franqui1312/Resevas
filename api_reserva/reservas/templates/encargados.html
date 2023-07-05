@@ -1,0 +1,25 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %}
+ 
+<h2 class="titulo">Encargados</h2>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Encargado</th>
+            <th>Telefono</th>
+            <th>Email</th>
+        </tr>       
+    </thead>
+    <tbody>
+        {% for encargado in encargados %} 
+        <tr class="filas">
+            <td><a href="{% url 'detalle_encargado' encargado.id %}">{{ encargado.apellido_nombre }}</a></td>
+            <td>{{ encargado.telefono }}</td>
+            <td>{{ encargado.email}}</td>
+        {% endfor %} 
+    </tbody>
+</table>
+
+
+{% endblock %} 

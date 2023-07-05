@@ -1,0 +1,10 @@
+{% include 'navbar.html' %} 
+
+{% block content %}
+<div class="detalle">
+    <h1>Complejo</h1>
+    <h2>{{  complejo.nombre }}</h2>
+    <p><strong>Direccion: </strong> {{ complejo.direccion}}</p>
+    <p><strong>Encargado: </strong> {{ complejo.encargado}}</p>
+</div>
+{% endblock %}

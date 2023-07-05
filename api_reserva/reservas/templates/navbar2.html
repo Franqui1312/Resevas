@@ -1,0 +1,91 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block content %} 
+
+<div class="navbar-container">
+    <div class="logo-container">
+        <div class="logo">
+            <span class="material-icons-sharp">
+                dashboard
+            </span>
+            <h2>Reser<span class="danger">vas</span></h2>
+        </div>
+    </div>
+
+    <div class="btn-container">
+                <button id="menu-btn" class="btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="btn">
+                    <div class="dark-mode">
+                        <span class="material-icons-sharp active">
+                            light_mode
+                        </span>
+                        <span class="material-icons-sharp">
+                            dark_mode
+                        </span>
+                    </div>
+                </div>
+    </div>
+    <aside>
+        
+        <div class="toggle">
+            <div class="close" id="close-btn">
+                <span class="material-icons-sharp">
+                    close
+                </span>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <a href="/reservas">
+                <span class="material-icons-sharp">
+                    dashboard
+                </span>
+                <h3>Reservas</h3>
+            </a>
+            <a href="/servicios">
+                <span class="material-icons-sharp">
+                    room_service
+                </span>
+                <h3>Servicios</h3>
+            </a>
+            <a href="/clientes">
+                <span class="material-icons-sharp">
+                    group
+                </span>
+                <h3>Clientes</h3>
+            </a>
+            <a href="/encargados">
+                <span class="material-icons-sharp">
+                    person
+                </span>
+                <h3>Encargados</h3>
+            </a>
+            <a href="/cabanias">
+                <span class="material-icons-sharp">
+                    home
+                </span>
+                <h3>Cabañas</h3>
+            </a>
+            <a href="/complejos">
+                <span class="material-icons-sharp">
+                    domain
+                </span>
+                <h3>Complejos</h3>
+            </a>
+            <a href="#">
+                <span class="material-icons-sharp">
+                    settings
+                </span>
+                <h3>Settings</h3>
+            </a>
+        </div>
+    </aside>
+    
+</div>
+
+
+{% endblock %} 

@@ -1,0 +1,12 @@
+{% include 'navbar.html' %} 
+
+{% block content %}
+<div class="detalle">
+    <h1>Cabaña</h1>
+    <h2>{{ cabania.nombre }}</h2>
+    <p><strong>Tipo: </strong>{{ cabania.tipo }}</p>
+    <p><strong>Capacidad: </strong>{{ cabania.capacidad }}</p>
+    <p><strong>Precio: </strong>{{ cabania.precio }}</p>
+    <p><strong>Complejo: </strong>{{ cabania.complejo }}</p>
+</div>
+{% endblock %}

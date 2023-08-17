@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect, reverse
 from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio
 
 # Create your views here.
@@ -103,3 +103,40 @@ def detalle_servicio(request, servicio_id):
         'servicio': servicio
     } 
     return render(request, 'detalle_servicio.html', context)
+
+def modif_encargado(request, pk):
+    encargado = Encargado.objects.get(id=pk)
+    
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        apellido_nombre = request.POST.get('apellido_nombre')
+        telefono = request.POST.get('telefono')
+        email = request.POST.get('email')
+
+        encargado.apellido_nombre = apellido_nombre
+        encargado.telefono = telefono
+        encargado.email = email
+        encargado.save()
+
+        return HttpResponseRedirect(reverse('tabla_encargados'))
+    return render(request, "form_encargado.html", {'encargado': encargado})
+    
+def nuevo_encargado(request):
+    if request.method=='POST':
+        apellido_nombre = request.POST.get('apellido_nombre')
+        telefono = request.POST.get('telefono')
+        email = request.POST.get('email')
+
+        Encargado.objects.create(apellido_nombre=apellido_nombre, telefono=telefono, email=email)
+
+        return HttpResponseRedirect(reverse('tabla_encargados'))
+    return render(request, "form_encargado.html")
+    
+def borrar_encargado(request, pk):
+    encargado = Encargado.objects.get(id=pk)
+    if request.method == 'POST':
+        encargado.delete()
+        return HttpResponseRedirect(reverse('tabla_encargados'))
+    
+    return render(request, 'conf_borrar_encargado.html', {'encargado': encargado})
+

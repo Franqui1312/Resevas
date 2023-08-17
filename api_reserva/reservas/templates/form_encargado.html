@@ -1,0 +1,25 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %}
+
+
+    <form class="formulario" method="POST">
+        <h1>Encargado</h1>
+        {% csrf_token %}
+
+        <div class="campos">
+            <label for="apellido_nombre">Apellido y Nombre</label>
+            <input type="text" class="form-control" id="apellido_nombre" name="apellido_nombre" value="{{ encargado.apellido_nombre}}" required>
+    
+            <label for="telefono">Telefono</label>
+            <input type="number" class="form-control" id="telefono" name="telefono" value="{{ encargado.telefono }}" required>
+    
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ encargado.email }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-outlined">Guardar</button>
+    </form>
+
+
+{% endblock %} 

@@ -77,12 +77,15 @@
 }
 
 .btn{
-    margin: auto;
+    font-family: 'poppins', sans-serif;
+    border: .125rem solid transparent;
 }
 
 .btn:hover{
     color: var(--color-danger);
+    border-color:var(--color-danger);
     transition: all 0.3s ease;
+
 }
 
 .close{

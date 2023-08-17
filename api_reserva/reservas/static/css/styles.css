@@ -39,13 +39,18 @@ nav{
 .navbar{
     color: var(--color-background);
     border-radius: var(--border-radius-1);
+    font-family: 'poppins', sans-serif;  
+    transition: all 0.3s ease;
 }
 
+.nav-item{
+    border-radius: var(--card-border-radius);
+}
 
 .navbar :hover{
     color: var(--color-danger);
-    transition: all 0.3s ease;
     box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
 }
 
 header{
@@ -53,6 +58,12 @@ header{
     color: var(--color-dark);
     margin: 0rem;
     height: 3.125rem;
+    font-family: 'poppins', sans-serif; 
+}
+
+header :hover{
+    color: #FF0060;
+    transition:all 0.3s ease;
 }
 
 .contenedor-tablas{
@@ -62,7 +73,13 @@ header{
 .titulo{
     color: var(--color-danger);
     text-align: center;
-    font-family: var(--font-family);
+    font-family: 'poppins', sans-serif;
+    margin-top: 1rem;
+}
+
+.table-hover{
+    font-family: 'poppins', sans-serif;
+    margin-top: 1rem;
 }
 
 .table-hover tbody tr:hover{
@@ -91,8 +108,10 @@ footer{
     border-radius: var(--card-border-radius);
     box-shadow: var(--box-shadow);
     height: 70vh;
-    width: 30vw;
+    width: 50vw;
     margin: auto;
+    margin-top: 5rem;
+    font-family: 'poppins', sans-serif;
 }
 
 .detalle  h2, p{
@@ -126,4 +145,38 @@ body::-webkit-scrollbar-thumb{
     background-color: var(--color-danger);
 }
 
+.formulario{
+    margin: auto;
+    margin-top: 1rem;
+    width: 70vw;
+    height: 70vh;
 
+    font-family: 'poppins', sans serif;
+
+    background-color: var(--color-white);
+    box-shadow: var(--box-shadow);
+    padding: 1rem;
+    border-radius: var(--card-border-radius);
+    display: flex;
+    flex-direction: column;
+}
+
+.campos{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+}
+
+.btn{
+    background-color: #FF0060;
+}
+
+.btn .btn-outlined:hover{
+    color: #FF0060;
+}
+
+.formulario h1{
+    color: #FF0060;
+    text-align: center;
+    margin-bottom: 1rem;
+}

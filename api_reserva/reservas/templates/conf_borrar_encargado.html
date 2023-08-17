@@ -1,0 +1,16 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %}
+
+<div class="detalle">
+    <h1>Borrar Encargado</h1>
+
+    <p>¿Esta seguro de borrar el encargado <b>{{ encargado.apellido_nombre}}</b>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Aceptar</button>
+        <a type="submit" class="btn" href="/encargados/">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %} 

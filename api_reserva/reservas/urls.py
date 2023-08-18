@@ -16,7 +16,7 @@ urlpatterns = [
     path('cabanias/<int:cabania_id>/', views.detalle_cabania, name='detalle_cabania'),
     path('reservas/<int:reserva_id>/', views.detalle_reserva, name='detalle_reserva'),
     path('servicios/<int:servicio_id>/', views.detalle_servicio, name='detalle_servicio'),
-
+    path('encargados/', views.cancelar_modif, name='cancelar_modif'),
     path('encargados/encargadoNuevo/', views.nuevo_encargado, name='nuevo_encargado'),
     path('encargados/encargadoModif/<int:pk>/', views.modif_encargado, name='modif_encargado'),
     path('encargados/encargadoBorrar/<int:pk>/', views.borrar_encargado, name='borrar_encargado')

@@ -15,6 +15,7 @@ class Cliente(models.Model):
         return self.apellido_nombre
 
 class Encargado(models.Model):
+    dni = models.IntegerField(default=0)
     apellido_nombre = models.CharField(max_length=100)
     telefono = models.CharField(max_length=30)
     email = models.CharField(max_length=50, default="user@gmail.com")

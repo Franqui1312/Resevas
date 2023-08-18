@@ -8,6 +8,10 @@
         {% csrf_token %}
 
         <div class="campos">
+
+            <label for="dni">Dni</label>
+            <input type="number" class="form-control" id="dni" name="dni" value="{{ encargado.dni }}" required>
+
             <label for="apellido_nombre">Apellido y Nombre</label>
             <input type="text" class="form-control" id="apellido_nombre" name="apellido_nombre" value="{{ encargado.apellido_nombre}}" required>
     
@@ -18,7 +22,10 @@
             <input type="email" class="form-control" id="email" name="email" value="{{ encargado.email }}" required>
         </div>
 
-        <button type="submit" class="btn btn-outlined">Guardar</button>
+        <button type="submit" class="btn btn-outline-secondary">Guardar</button>
+
+        <a class="btn btn-outline-secondary" href="/encargados/">Cancelar</a>
+        
     </form>
 
 

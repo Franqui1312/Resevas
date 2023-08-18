@@ -109,10 +109,12 @@ def modif_encargado(request, pk):
     
     if request.method == 'POST':
         id = request.POST.get('id')
+        dni = request.POST.get ('dni')
         apellido_nombre = request.POST.get('apellido_nombre')
         telefono = request.POST.get('telefono')
         email = request.POST.get('email')
 
+        encargado.dni = dni
         encargado.apellido_nombre = apellido_nombre
         encargado.telefono = telefono
         encargado.email = email
@@ -123,11 +125,12 @@ def modif_encargado(request, pk):
     
 def nuevo_encargado(request):
     if request.method=='POST':
+        dni = request.POST.get('dni')
         apellido_nombre = request.POST.get('apellido_nombre')
         telefono = request.POST.get('telefono')
         email = request.POST.get('email')
 
-        Encargado.objects.create(apellido_nombre=apellido_nombre, telefono=telefono, email=email)
+        Encargado.objects.create(dni= dni, apellido_nombre=apellido_nombre, telefono=telefono, email=email)
 
         return HttpResponseRedirect(reverse('tabla_encargados'))
     return render(request, "form_encargado.html")
@@ -140,3 +143,5 @@ def borrar_encargado(request, pk):
     
     return render(request, 'conf_borrar_encargado.html', {'encargado': encargado})
 
+def cancelar_modif(request):
+    return render(request, 'encargados.html')

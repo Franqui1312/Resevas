@@ -8,8 +8,8 @@
     <p>¿Esta seguro de borrar el encargado <b>{{ encargado.apellido_nombre}}</b>?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="btn">Aceptar</button>
-        <a type="submit" class="btn" href="/encargados/">Cancelar</a>
+        <button type="submit" class="btn btn-outline-secondary">Aceptar</button>
+        <a type="submit" class="btn btn-outline-secondary" href="/encargados/">Cancelar</a>
     </form>
 </div>
 

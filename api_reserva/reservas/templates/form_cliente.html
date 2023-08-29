@@ -1,0 +1,43 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %}
+
+    <form class="formulario" method="POST">
+        <h1>Cliente</h1>
+        {% csrf_token %}
+
+        <div class="campos">
+
+            <label for="dni">Dni</label>
+            <input type="number" class="form-control" id="dni" name="dni" value="{{ cliente.dni }}" required>
+
+            <label for="Apellido_nombre">Apellido y Nombre</label>
+            <input type="text" class="form-control" id="apellido_nombre" name="apellido_nombre" value="{{ cliente.apellido_nombre }}" required>
+
+            <label for="telefono">Telefono</label>
+            <input type="number" class="form-control" id="telefono" name="telefono" value="{{ cliente.telefono }}" required>
+    
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ cliente.email }}" required>
+
+            
+            <label for="pais">Pais</label>
+            <input type="text" class="form-control" id="pais" name="pais" value="{{ cliente.pais }}" required>
+
+            <label for="provincia">Provincia</label>
+            <input type="text" class="form-control" id="provincia" name="provincia" value="{{ cliente.provincia }}" required>
+
+            <label for="localidad">Localidad</label>
+            <input type="text" class="form-control" id="localidad" name="localidad" value="{{ cliente.localidad }}" required>
+
+        </div>
+
+        <div class="button-conteiner">
+            <button type="submit" class="btn btn-outline-secondary">Guardar</button>
+
+            <a class="btn btn-outline-secondary" href="/clientes/">Cancelar</a>
+        </div>
+
+    </form>
+
+{% endblock %} 

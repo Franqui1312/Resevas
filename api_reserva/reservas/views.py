@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio
+from .forms import formCabania
 
 # Create your views here.
 
@@ -104,6 +105,8 @@ def detalle_servicio(request, servicio_id):
     } 
     return render(request, 'detalle_servicio.html', context)
 
+#abm encargado
+
 def modif_encargado(request, pk):
     encargado = Encargado.objects.get(id=pk)
     
@@ -143,5 +146,76 @@ def borrar_encargado(request, pk):
     
     return render(request, 'conf_borrar_encargado.html', {'encargado': encargado})
 
-def cancelar_modif(request):
-    return render(request, 'encargados.html')
+#abm clientes
+
+def modif_cliente(request, pk):
+    cliente = Cliente.objects.get(dni=pk)
+
+    if request.method == 'POST':
+        dni = request.POST.get('dni')
+        apellido_nombre = request.POST.get('apellido_nombre')
+        telefono = request.POST.get('telefono')
+        email = request.POST.get('email')
+        pais = request.POST.get('pais')
+        provincia = request.POST.get('provincia')
+        localidad = request.POST.get('localidad')
+
+        cliente.dni = dni
+        cliente.apellido_nombre = apellido_nombre
+        cliente.telefono = telefono
+        cliente.email = email
+        cliente.pais = pais
+        cliente.provincia = provincia
+        cliente.localidad = localidad
+        cliente.save()
+
+        return HttpResponseRedirect(reverse('tabla_clientes'))
+    return render(request, "form_cliente.html", {'cliente': cliente})
+
+def nuevo_cliente(request):
+    if request.method=='POST':
+        dni = request.POST.get('dni')
+        apellido_nombre = request.POST.get('apellido_nombre')
+        telefono = request.POST.get('telefono')
+        email = request.POST.get('email')
+        pais = request.POST.get('pais')
+        provincia = request.POST.get('provincia')
+        localidad = request.POST.get('localidad')
+
+        Cliente.objects.create(dni=dni, apellido_nombre=apellido_nombre, telefono=telefono, email=email, pais=pais, provincia=provincia, localidad=localidad)
+
+        return HttpResponseRedirect(reverse('tabla_clientes'))
+    return render(request, "form_cliente.html")
+
+def modif_cabania(request, pk):
+    cabania = Cabania.objects.get(id=pk)
+    if request.method=='POST':
+        form = formCabania(request.POST, instance=cabania)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_cabanias'))
+        
+    else:
+        form = formCabania(instance=cabania)
+
+    return render(request, 'form_cabania.html', {'form': form,'cabania': cabania})
+
+def nuevo_cabania(request):
+    if request.method=='POST':
+        form = formCabania(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_cabanias'))
+        
+    else:
+        form = formCabania()
+    
+    return render(request, 'form_cabania.html', {'form': form})
+
+def borrar_cabania(request, pk):
+    cabania = Cabania.objects.get(id=pk)
+    if request.method=='POST':
+        cabania.delete()
+        return HttpResponseRedirect(reverse('tabla_cabanias'))
+    return render(request, 'conf_borrar_cabania.html', {'cabania': cabania})
+

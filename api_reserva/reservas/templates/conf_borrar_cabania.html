@@ -1,0 +1,18 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %}
+
+<div class="detalle">
+    <h1>Borrar Cabaña</h1>
+
+    <p>¿Esta seguro de borrar la cabaña <b>{{ cabania.nombre}}</b>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="button-conteiner">
+            <button type="submit" class="btn btn-outline-secondary">Aceptar</button>
+            <a type="submit" class="btn btn-outline-secondary" href="/cabanias/">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %} 

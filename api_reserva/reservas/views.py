@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio
+from .forms import formCabania, formEncargado, formCliente, formComplejo, formServicio, formReserva
 
 # Create your views here.
 
@@ -104,44 +105,201 @@ def detalle_servicio(request, servicio_id):
     } 
     return render(request, 'detalle_servicio.html', context)
 
+#abm encargado
+
 def modif_encargado(request, pk):
     encargado = Encargado.objects.get(id=pk)
-    
-    if request.method == 'POST':
-        id = request.POST.get('id')
-        dni = request.POST.get ('dni')
-        apellido_nombre = request.POST.get('apellido_nombre')
-        telefono = request.POST.get('telefono')
-        email = request.POST.get('email')
+    if request.method=='POST':
+        form = formEncargado(request.POST, instance=encargado)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_encargados'))
+        
+    else:
+        form = formEncargado(instance=encargado)
 
-        encargado.dni = dni
-        encargado.apellido_nombre = apellido_nombre
-        encargado.telefono = telefono
-        encargado.email = email
-        encargado.save()
+    return render(request, 'form_encargado.html', {'form': form,'encargado': encargado})
 
-        return HttpResponseRedirect(reverse('tabla_encargados'))
-    return render(request, "form_encargado.html", {'encargado': encargado})
-    
 def nuevo_encargado(request):
     if request.method=='POST':
-        dni = request.POST.get('dni')
-        apellido_nombre = request.POST.get('apellido_nombre')
-        telefono = request.POST.get('telefono')
-        email = request.POST.get('email')
-
-        Encargado.objects.create(dni= dni, apellido_nombre=apellido_nombre, telefono=telefono, email=email)
-
-        return HttpResponseRedirect(reverse('tabla_encargados'))
-    return render(request, "form_encargado.html")
+        form = formEncargado(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_encargados'))
+        
+    else:
+        form = formEncargado()
     
+    return render(request, 'form_encargado.html', {'form': form})
+
 def borrar_encargado(request, pk):
     encargado = Encargado.objects.get(id=pk)
-    if request.method == 'POST':
+    if request.method=='POST':
         encargado.delete()
         return HttpResponseRedirect(reverse('tabla_encargados'))
-    
     return render(request, 'conf_borrar_encargado.html', {'encargado': encargado})
 
-def cancelar_modif(request):
-    return render(request, 'encargados.html')
+#abm cabañas
+def modif_cabania(request, pk):
+    cabania = Cabania.objects.get(id=pk)
+    if request.method=='POST':
+        form = formCabania(request.POST, instance=cabania)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_cabanias'))
+        
+    else:
+        form = formCabania(instance=cabania)
+
+    return render(request, 'form_cabania.html', {'form': form,'cabania': cabania})
+
+def nuevo_cabania(request):
+    if request.method=='POST':
+        form = formCabania(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_cabanias'))
+        
+    else:
+        form = formCabania()
+    
+    return render(request, 'form_cabania.html', {'form': form})
+
+def borrar_cabania(request, pk):
+    cabania = Cabania.objects.get(id=pk)
+    if request.method=='POST':
+        cabania.delete()
+        return HttpResponseRedirect(reverse('tabla_cabanias'))
+    return render(request, 'conf_borrar_cabania.html', {'cabania': cabania})
+
+#abm cliente
+def modif_cliente(request, pk):
+    cliente = Cliente.objects.get(id=pk)
+    if request.method=='POST':
+        form = formCliente(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_clientes'))
+        
+    else:
+        form = formCliente(instance=cliente)
+
+    return render(request, 'form_cliente.html', {'form': form,'cliente': cliente})
+
+def nuevo_cliente(request):
+    if request.method=='POST':
+        form = formCliente(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_clientes'))
+        
+    else:
+        form = formCliente()
+    
+    return render(request, 'form_cliente.html', {'form': form})
+
+def borrar_cliente(request, pk):
+    cliente = Cliente.objects.get(id=pk)
+    if request.method=='POST':
+        cliente.delete()
+        return HttpResponseRedirect(reverse('tabla_cliente'))
+    return render(request, 'conf_borrar_cliente.html', {'cliente': cliente})
+
+#abm complejo
+def modif_complejo(request, pk):
+    complejo = Complejo.objects.get(id=pk)
+    if request.method=='POST':
+        form = formComplejo(request.POST, instance=complejo)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_complejos'))
+        
+    else:
+        form = formComplejo(instance=complejo)
+
+    return render(request, 'form_complejo.html', {'form': form,'complejo': complejo})
+
+def nuevo_complejo(request):
+    if request.method=='POST':
+        form = formComplejo(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_complejos'))
+        
+    else:
+        form = formComplejo()
+    
+    return render(request, 'form_complejo.html', {'form': form})
+
+def borrar_complejo(request, pk):
+    complejo = Complejo.objects.get(id=pk)
+    if request.method=='POST':
+        complejo.delete()
+        return HttpResponseRedirect(reverse('tabla_complejos'))
+    return render(request, 'conf_borrar_complejo.html', {'complejo': complejo})
+
+#abm servicios
+def modif_servicio(request, pk):
+    servicio = Servicio.objects.get(id=pk)
+    if request.method=='POST':
+        form = formServicio(request.POST, instance=servicio)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_servicios'))
+        
+    else:
+        form = formServicio(instance=servicio)
+
+    return render(request, 'form_servicio.html', {'form': form,'servicio': servicio})
+
+def nuevo_servicio(request):
+    if request.method=='POST':
+        form = formServicio(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_servicios'))
+        
+    else:
+        form = formServicio()
+    
+    return render(request, 'form_servicio.html', {'form': form})
+
+def borrar_servicio(request, pk):
+    servicio = Servicio.objects.get(id=pk)
+    if request.method=='POST':
+        servicio.delete()
+        return HttpResponseRedirect(reverse('tabla_servicios'))
+    return render(request, 'conf_borrar_servicio.html', {'servicio': servicio})
+
+#abm reservas
+def modif_reserva(request, pk):
+    reserva = Reserva.objects.get(id=pk)
+    if request.method=='POST':
+        form = formReserva(request.POST, instance=reserva)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_reservas'))
+        
+    else:
+        form = formReserva(instance=reserva)
+
+    return render(request, 'form_reserva.html', {'form': form,'reserva': reserva})
+
+def nuevo_reserva(request):
+    if request.method=='POST':
+        form = formReserva(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('tabla_reservas'))
+        
+    else:
+        form = formReserva()
+    
+    return render(request, 'form_reserva.html', {'form': form})
+
+def borrar_reserva(request, pk):
+    reserva = Reserva.objects.get(id=pk)
+    if request.method=='POST':
+        reserva.delete()
+        return HttpResponseRedirect(reverse('tabla_reservas'))
+    return render(request, 'conf_borrar_reserva.html', {'reserva': reserva})

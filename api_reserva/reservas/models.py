@@ -3,8 +3,8 @@ from django.db import models
 # Create your models here.
 
 class Cliente(models.Model):
+    dni = models.IntegerField()
     apellido_nombre = models.CharField(max_length=100)
-    dni = models.IntegerField(default=0)
     telefono = models.CharField(max_length=30)
     email = models.CharField(max_length=50, default="user@gmail.com")
     pais = models.CharField(max_length=30, default="Argentina")
@@ -15,7 +15,7 @@ class Cliente(models.Model):
         return self.apellido_nombre
 
 class Encargado(models.Model):
-    dni = models.IntegerField(default=0)
+    dni = models.IntegerField()
     apellido_nombre = models.CharField(max_length=100)
     telefono = models.CharField(max_length=30)
     email = models.CharField(max_length=50, default="user@gmail.com")
@@ -24,10 +24,9 @@ class Encargado(models.Model):
         return self.apellido_nombre
 
 class Servicio(models.Model):
-    codigo = models.CharField(default="nada", max_length=20)
-    descripcion = models.CharField(default="nada", max_length=150)
+    codigo = models.CharField(max_length=20)
+    descripcion = models.CharField(default="ninguna", max_length=150)
     precio = models.FloatField(default=0, max_length=20)
-    #incluido = models.CharField(default="no",max_length=20, choices=[('si','si'),('no','no')])
 
     def __str__(self):
         return self.codigo

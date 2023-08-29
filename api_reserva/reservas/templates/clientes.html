@@ -3,6 +3,7 @@
 {% block content %} 
 
 <h2 class="titulo">Clientes</h2>
+<div class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-primary" href="/clientes/clienteNuevo/">Añadir Cliente</a></div>
 <table class="table table-striped table-hover">
     <thead>
         <tr>
@@ -25,6 +26,8 @@
             <td>{{ cliente.pais }}</td>
             <td>{{ cliente.provincia }}</td>
             <td>{{ cliente.localidad }}</td>
+            <td class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-secondary" href="/clientes/clienteModif/{{ cliente.id }}"> Modificar</td>
+            <td><a class="btn btn-outline-secondary" href="/clientes/clienteBorrar/{{ cliente.id }}">Borrar</a></td>
         {% endfor %} 
     </tbody>
 </table>

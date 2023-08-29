@@ -2,6 +2,7 @@
 {% block content %}
  <div class="contenedor-tabla">
     <h2 class="titulo">Reservas</h2>
+    <div class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-primary" href="/reservas/reservaNuevo/">Añadir Reserva</a></div>
     <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -26,6 +27,8 @@
                 <td>{{ reserva.diaSalida }}</td>
                 <td>{{ reserva.seña }}</td>
                 <td>{{ reserva.precio }}</td>    
+                <td class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-secondary" href="/reservas/reservaModif/{{ reserva.id }}">Modificar</a></td>
+                <td><a class="btn btn-outline-secondary" href="/reservas/reservaBorrar/{{ reserva.id }}">Borrar</a></td>
             </tr>
             {% endfor %} 
         </tbody>

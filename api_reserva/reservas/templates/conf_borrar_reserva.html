@@ -1,0 +1,18 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %}
+
+<div class="detalle">
+    <h1>Borrar Reserva</h1>
+
+    <p>¿Esta seguro de borrar la reserva realizada por <b>{{ reserva.cliente}}</b>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="button-conteiner">
+            <button type="submit" class="btn btn-outline-secondary">Aceptar</button>
+            <a type="submit" class="btn btn-outline-secondary" href="/reservas/">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %} 

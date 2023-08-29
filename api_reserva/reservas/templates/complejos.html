@@ -3,6 +3,7 @@
 {% block content %} 
 
 <h2 class="titulo">Complejos</h2>
+<div class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-primary" href="/complejos/complejoNuevo/">Añadir Complejo</a></div>
 <table class="table table-striped table-hover">
     <thead>
         <tr>
@@ -17,6 +18,8 @@
             <td><a href="{% url 'detalle_complejo' complejo.id %}">{{ complejo.nombre }}</a></td>
             <td>{{ complejo.direccion }}</td>
             <td>{{ complejo.encargado}}</td>
+            <td class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-secondary" href="/complejos/complejoModif/{{ complejo.id }}"> Modificar</td>
+                <td><a class="btn btn-outline-secondary" href="/complejos/complejoBorrar/{{ complejo.id }}">Borrar</a></td>
         {% endfor %} 
     </tbody>
 </table>

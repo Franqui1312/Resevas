@@ -1,0 +1,18 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %}
+
+<div class="detalle">
+    <h1>Borrar Complejo</h1>
+
+    <p>¿Esta seguro de borrar el complejo <b>{{ complejo.nombre}}</b>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="button-conteiner">
+            <button type="submit" class="btn btn-outline-secondary">Aceptar</button>
+            <a type="submit" class="btn btn-outline-secondary" href="/complejos/">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %} 

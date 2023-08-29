@@ -1,32 +1,13 @@
 {% include 'navbar.html' %} 
 {% load static %} 
 {% block content %}
-
-
-    <form class="formulario" method="POST">
-        <h1>Encargado</h1>
+<div class="row">
+    <h1 class="titulo">Encargados</h1>
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <div class="campos">
-
-            <label for="dni">Dni</label>
-            <input type="number" class="form-control" id="dni" name="dni" value="{{ encargado.dni }}" required>
-
-            <label for="apellido_nombre">Apellido y Nombre</label>
-            <input type="text" class="form-control" id="apellido_nombre" name="apellido_nombre" value="{{ encargado.apellido_nombre}}" required>
-    
-            <label for="telefono">Telefono</label>
-            <input type="number" class="form-control" id="telefono" name="telefono" value="{{ encargado.telefono }}" required>
-    
-            <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ encargado.email }}" required>
-        </div>
-
-        <button type="submit" class="btn btn-outline-secondary">Guardar</button>
-
-        <a class="btn btn-outline-secondary" href="/encargados/">Cancelar</a>
-        
+        {{form.as_p}}
+        <button class="btn btn-outline-primary mb-3" type="submit">Guardar</button>
+        <a class="btn btn-outline-secondary mb-3" href="{% url 'tabla_encargados' %}">Cancelar</a>   
     </form>
-
-
+</div>
 {% endblock %} 

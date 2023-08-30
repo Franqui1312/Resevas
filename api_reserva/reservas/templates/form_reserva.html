@@ -1,6 +1,7 @@
 {% include 'navbar.html' %} 
 {% load static %} 
 {% block content %}
+
 <div class="row">
     <h1 class="titulo">Reservas</h1>
     <form method="post" enctype="multipart/form-data">
@@ -10,4 +11,5 @@
         <a class="btn btn-outline-secondary mb-3" href="{% url 'tabla_reservas' %}">Cancelar</a>   
     </form>
 </div>
+
 {% endblock %} 

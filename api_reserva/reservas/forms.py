@@ -1,12 +1,18 @@
 from django import forms
+<<<<<<< HEAD
 from .models import Cabania, Encargado, Cliente, Complejo, Reserva, Servicio
 import datetime
+=======
+from .models import Cabania
+
+>>>>>>> 49f73bc3c3687db73288632ede484512c8d311bc
 class formCabania(forms.ModelForm):
     class Meta:
         model = Cabania
         fields = ('nombre', 'tipo', 'capacidad', 'precio', 'complejo')
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+<<<<<<< HEAD
             'tipo': forms.Select(attrs={'class': 'form-select'}),
             'capacidad': forms.NumberInput(attrs={'class': 'form-control'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -71,4 +77,10 @@ class formReserva(forms.ModelForm):
             'servicios': forms.Select(attrs={'class': 'form-select'}),
             'seña': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio de la Seña'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio'}),
+=======
+            'tipo': forms.NumberInput(attrs={'class': 'form-control'}),
+            'capacidad': forms.NumberInput(attrs={'class': 'form-control'}),
+            'precio': forms.NumberInput(attrs={'class': 'from-control'}),
+            'complejo': forms.TextInput(attrs={'class': 'form-control'}),
+>>>>>>> 49f73bc3c3687db73288632ede484512c8d311bc
         }

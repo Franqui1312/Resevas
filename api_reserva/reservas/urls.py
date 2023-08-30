@@ -23,12 +23,16 @@ urlpatterns = [
 
     path('clientes/clienteNuevo/', views.nuevo_cliente, name='nuevo_cliente'),
     path('clientes/clienteModif/<int:pk>/', views.modif_cliente, name='modif_cliente'),
+<<<<<<< HEAD
     path('clientes/clienteBorrar/<int:pk>/', views.borrar_cliente, name='borrar_cliente'),
+=======
+>>>>>>> 49f73bc3c3687db73288632ede484512c8d311bc
 
     path('cabanias/cabaniaNuevo/', views.nuevo_cabania, name='nuevo_cabania'),
     path('cabanias/cabaniaModif/<int:pk>/', views.modif_cabania, name='modif_cabania'),
     path('cabanias/cabaniaBorrar/<int:pk>/', views.borrar_cabania, name='borrar_cabania'),
 
+<<<<<<< HEAD
     path('complejos/complejoNuevo/', views.nuevo_complejo, name='nuevo_complejo'),
     path('complejos/complejoModif/<int:pk>/', views.modif_complejo, name='modif_complejo'),
     path('complejos/complejoBorrar/<int:pk>/', views.borrar_complejo, name='borrar_complejo'),
@@ -40,4 +44,6 @@ urlpatterns = [
     path('reservas/reservaNuevo/', views.nuevo_reserva, name='nuevo_reserva'),
     path('reservas/reservaModif/<int:pk>/', views.modif_reserva, name='modif_reserva'),
     path('reservas/reservaBorrar/<int:pk>/', views.borrar_reserva, name='borrar_reserva'),
+=======
+>>>>>>> 49f73bc3c3687db73288632ede484512c8d311bc
 ]

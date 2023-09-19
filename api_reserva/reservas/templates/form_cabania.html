@@ -6,13 +6,10 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
-<<<<<<< HEAD
+
         <button class="btn btn-outline-primary mb-3" type="submit">Guardar</button>
         <a class="btn btn-outline-secondary mb-3" href="{% url 'tabla_cabanias' %}">Cancelar</a>   
-=======
-        <button class="btn" type="submit">Guardar</button>
-        <a class="btn btn-outline-primary mb-3" href="{% url 'tabla_cabanias' %}">Cancelar</a>   
->>>>>>> 49f73bc3c3687db73288632ede484512c8d311bc
+
     </form>
 </div>
 {% endblock %} 

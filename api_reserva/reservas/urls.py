@@ -25,7 +25,6 @@ urlpatterns = [
     path('clientes/clienteModif/<int:pk>/', views.modif_cliente, name='modif_cliente'),
     path('clientes/clienteBorrar/<int:pk>/', views.borrar_cliente, name='borrar_cliente'),
 
-
     path('cabanias/cabaniaNuevo/', views.nuevo_cabania, name='nuevo_cabania'),
     path('cabanias/cabaniaModif/<int:pk>/', views.modif_cabania, name='modif_cabania'),
     path('cabanias/cabaniaBorrar/<int:pk>/', views.borrar_cabania, name='borrar_cabania'),

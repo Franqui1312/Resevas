@@ -274,32 +274,54 @@ def borrar_servicio(request, pk):
 #abm reservas
 def modif_reserva(request, pk):
     reserva = Reserva.objects.get(id=pk)
-    if request.method=='POST':
+    
+    if request.method == 'POST':
         form = formReserva(request.POST, instance=reserva)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('tabla_reservas'))
-        
     else:
         form = formReserva(instance=reserva)
-
-    return render(request, 'form_reserva.html', {'form': form,'reserva': reserva})
+        
+    # Obtén el complejo seleccionado en la reserva
+    complejo_seleccionado = form['complejo'].value()
+    
+    # Filtra las cabañas disponibles para el complejo seleccionado
+    cabañas_disponibles = Cabania.objects.filter(complejo_id=complejo_seleccionado)
+    
+    # Actualiza el queryset del campo 'cabania' en el formulario
+    form.fields['cabania'].queryset = cabañas_disponibles
+    
+    return render(request, 'form_reserva.html', {'form': form, 'reserva': reserva})
 
 def nuevo_reserva(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         form = formReserva(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('tabla_reservas'))
-        
     else:
         form = formReserva()
     
+    # Por defecto, establece el queryset del campo 'cabania' en todas las cabañas
+    form.fields['cabania'].queryset = Cabania.objects.all()
+    
     return render(request, 'form_reserva.html', {'form': form})
-
 def borrar_reserva(request, pk):
     reserva = Reserva.objects.get(id=pk)
     if request.method=='POST':
         reserva.delete()
         return HttpResponseRedirect(reverse('tabla_reservas'))
     return render(request, 'conf_borrar_reserva.html', {'reserva': reserva})
+
+def servicioReserva(request,reserva_id):
+    reserva = Reserva.objects.get(id=reserva_id)
+    servicios = reserva.servicios.all()
+    total_servicios = sum(servicio.precio for servicio in servicios)
+
+    context = {
+        'reserva' : reserva,
+        'total_servicios' : total_servicios
+    }
+
+    return render(request, 'servicios-reserva.html', context)

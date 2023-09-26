@@ -22,7 +22,7 @@
                 <td><a href="{% url 'detalle_reserva' reserva.id %}">{{ reserva.cliente.apellido_nombre }}</a></td>
                 <td>{{ reserva.complejo }}</td>
                 <td>{{ reserva.cabania }}</td>
-                <td>{{ reserva.servicios}}</td>
+                <td><a href="{% url 'serviciosReserva' reserva.id %}">ver detalle</a></td>
                 <td>{{ reserva.diaEntrada }}</td>
                 <td>{{ reserva.diaSalida }}</td>
                 <td>{{ reserva.seña }}</td>

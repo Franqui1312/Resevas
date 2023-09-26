@@ -56,7 +56,7 @@ class Reserva(models.Model):
     cabania = models.ForeignKey(Cabania, on_delete=models.CASCADE, default=None)
     diaEntrada = models.DateField()
     diaSalida = models.DateField()
-    servicios = models.ForeignKey(Servicio, on_delete=models.CASCADE, default=None)
+    servicios = models.ManyToManyField(Servicio)
     seña = models.FloatField(default=0, max_length=12)
     precio = models.FloatField(default=0,max_length=12)
 

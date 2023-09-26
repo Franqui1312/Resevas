@@ -13,6 +13,7 @@ class formCabania(forms.ModelForm):
             'complejo': forms.Select(attrs={'class': 'form-select'}),
         }
 
+
 class formEncargado(forms.ModelForm):
     class Meta:
         model = Encargado
@@ -58,7 +59,13 @@ class formServicio(forms.ModelForm):
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio'}),
         }
 
+
 class formReserva(forms.ModelForm):
+    servicios = forms.ModelMultipleChoiceField(
+        queryset=Servicio.objects.all(),  # QuerySet para obtener todos los servicios disponibles
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check'}),  # Puedes usar CheckboxSelectMultiple para seleccionar múltiples opciones
+        required=False,  # Cambiar esto según las necesidades de validación
+    )
     class Meta:
         model = Reserva
         fields = ('cliente', 'complejo', 'cabania', 'diaEntrada', 'diaSalida', 'servicios', 'seña', 'precio')
@@ -66,9 +73,8 @@ class formReserva(forms.ModelForm):
             'cliente': forms.Select(attrs={'class': 'form-select'}),
             'complejo': forms.Select(attrs={'class': 'form-select'}),
             'cabania': forms.Select(attrs={'class': 'form-select'}),
-            'diaEntrada': forms.SelectDateWidget(attrs={'class': 'form-select'}),
-            'diaSalida': forms.SelectDateWidget(attrs={'class': 'form-select'}),
-            'servicios': forms.Select(attrs={'class': 'form-select'}),
+            'diaEntrada': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
+            'diaSalida': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'seña': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio de la Seña'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio'}),
         }

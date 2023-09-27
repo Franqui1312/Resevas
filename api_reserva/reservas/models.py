@@ -63,3 +63,7 @@ class Reserva(models.Model):
     def __str__(self):
         return self.cliente.apellido_nombre
     
+
+class ReservaServicio(models.Model):
+    reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
+    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)

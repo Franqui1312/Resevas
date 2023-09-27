@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio
 from .forms import formCabania, formEncargado, formCliente, formComplejo, formServicio, formReserva
+from django.views.generic import  CreateView, UpdateView, DeleteView, ListView
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -21,12 +23,13 @@ def main(request):
     
     return render(request, 'main.html', context)
 
+'''
 def tabla_reservas(request):
     reservas = Reserva.objects.all()
 
     context = {'reservas': reservas}
     return render(request, 'reservas.html', context)
-
+'''
 def tabla_clientes(request):
     clientes = Cliente.objects.all()
 
@@ -39,23 +42,11 @@ def tabla_encargados(request):
     context = {'encargados': encargados}
     return render(request, 'encargados.html', context)
 
-def tabla_complejos(request):
-    complejos = Complejo.objects.all()
-
-    context = {'complejos': complejos}
-    return render(request, 'complejos.html', context)
-
 def tabla_cabanias(request):
     cabanias = Cabania.objects.all()
 
     context = {'cabanias': cabanias}
     return render(request, 'cabanias.html', context)
-
-def tabla_servicios(request):
-    servicios = Servicio.objects.all()
-
-    context = {'servicios': servicios}
-    return render(request, 'servicios.html', context)
 
 def detalle_cliente(request, cliente_id):
     cliente = Cliente.objects.get(id=cliente_id) #solo toma el id del cliente         #toma todos los atributos del cliente
@@ -206,113 +197,108 @@ def borrar_cliente(request, pk):
     return render(request, 'conf_borrar_cliente.html', {'cliente': cliente})
 
 #abm complejo
-def modif_complejo(request, pk):
-    complejo = Complejo.objects.get(id=pk)
-    if request.method=='POST':
-        form = formComplejo(request.POST, instance=complejo)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_complejos'))
-        
-    else:
-        form = formComplejo(instance=complejo)
+class tabla_complejos(ListView):
+    model = Complejo
+    template_name = 'complejos.html'
+    context_object_name = 'complejos'
 
-    return render(request, 'form_complejo.html', {'form': form,'complejo': complejo})
+class nuevo_complejo(CreateView):
+    model = Complejo
+    form_class = formServicio
+    template_name = 'form_complejo.html'
+    success_url = reverse_lazy('tabla_complejos')
 
-def nuevo_complejo(request):
-    if request.method=='POST':
-        form = formComplejo(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_complejos'))
-        
-    else:
-        form = formComplejo()
+class modif_complejo(UpdateView):
+    model = Complejo
+    form_class = formServicio
+    template_name = 'form_complejo.html'
+    success_url = reverse_lazy('tabla_complejos')
+
+class borrar_complejo(DeleteView):
+    model = Complejo
+    template_name = 'conf_borrar_complejo.html'
+    success_url = reverse_lazy('tabla_complejos')
     
-    return render(request, 'form_complejo.html', {'form': form})
-
-def borrar_complejo(request, pk):
-    complejo = Complejo.objects.get(id=pk)
-    if request.method=='POST':
-        complejo.delete()
-        return HttpResponseRedirect(reverse('tabla_complejos'))
-    return render(request, 'conf_borrar_complejo.html', {'complejo': complejo})
-
 #abm servicios
-def modif_servicio(request, pk):
-    servicio = Servicio.objects.get(id=pk)
-    if request.method=='POST':
-        form = formServicio(request.POST, instance=servicio)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_servicios'))
-        
-    else:
-        form = formServicio(instance=servicio)
+class tabla_servicios(ListView):
+    model = Servicio
+    template_name = 'servicios.html'
+    context_object_name = 'servicios'
 
-    return render(request, 'form_servicio.html', {'form': form,'servicio': servicio})
+class nuevo_servicio(CreateView):
+    model = Servicio
+    form_class = formServicio
+    template_name = 'form_servicio.html'
+    success_url = reverse_lazy('tabla_servicios')
 
-def nuevo_servicio(request):
-    if request.method=='POST':
-        form = formServicio(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_servicios'))
-        
-    else:
-        form = formServicio()
+class modif_servicio(UpdateView):
+    model = Servicio
+    form_class = formServicio
+    template_name = 'form_servicio.html'
+    success_url = reverse_lazy('tabla_servicios')
+
+class borrar_servicio(DeleteView):
+    model = Servicio
+    template_name = 'conf_borrar_servicio.html'
+    success_url = reverse_lazy('tabla_servicios')
     
-    return render(request, 'form_servicio.html', {'form': form})
-
-def borrar_servicio(request, pk):
-    servicio = Servicio.objects.get(id=pk)
-    if request.method=='POST':
-        servicio.delete()
-        return HttpResponseRedirect(reverse('tabla_servicios'))
-    return render(request, 'conf_borrar_servicio.html', {'servicio': servicio})
-
 #abm reservas
-def modif_reserva(request, pk):
-    reserva = Reserva.objects.get(id=pk)
-    
-    if request.method == 'POST':
-        form = formReserva(request.POST, instance=reserva)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_reservas'))
-    else:
-        form = formReserva(instance=reserva)
-        
-    # Obtén el complejo seleccionado en la reserva
-    complejo_seleccionado = form['complejo'].value()
-    
-    # Filtra las cabañas disponibles para el complejo seleccionado
-    cabañas_disponibles = Cabania.objects.filter(complejo_id=complejo_seleccionado)
-    
-    # Actualiza el queryset del campo 'cabania' en el formulario
-    form.fields['cabania'].queryset = cabañas_disponibles
-    
-    return render(request, 'form_reserva.html', {'form': form, 'reserva': reserva})
+class tabla_reservas(ListView):
+    model = Reserva
+    template_name = 'reservas.html'
+    context_object_name = 'reservas'
+class nuevo_reserva(CreateView):
+    model = Reserva
+    form_class = formReserva
+    template_name = 'form_reserva.html'
+    success_url = reverse_lazy('tabla_reservas')
 
-def nuevo_reserva(request):
-    if request.method == 'POST':
-        form = formReserva(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_reservas'))
-    else:
-        form = formReserva()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = formReserva.ReservaServicioFormset(self.request.POST)
+        else:
+            context['formset'] = formReserva.ReservaServicioFormset()
+        return context
     
-    # Por defecto, establece el queryset del campo 'cabania' en todas las cabañas
-    form.fields['cabania'].queryset = Cabania.objects.all()
-    
-    return render(request, 'form_reserva.html', {'form': form})
-def borrar_reserva(request, pk):
-    reserva = Reserva.objects.get(id=pk)
-    if request.method=='POST':
-        reserva.delete()
-        return HttpResponseRedirect(reverse('tabla_reservas'))
-    return render(request, 'conf_borrar_reserva.html', {'reserva': reserva})
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid() and form.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+class modif_reserva(UpdateView):
+    model = Reserva
+    form_class = formReserva
+    template_name = 'form_reserva.html'
+    success_url = reverse_lazy('tabla_reservas')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = formReserva.ReservaServicioFormset(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = formReserva.ReservaServicioFormset(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid() and form.is_valid():
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+class borrar_reserva(DeleteView):
+    model = Reserva
+    template_name = 'conf_borrar_reserva.html'
+    success_url = reverse_lazy('tabla_reservas')
 
 def servicioReserva(request,reserva_id):
     reserva = Reserva.objects.get(id=reserva_id)

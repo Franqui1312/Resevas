@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cabania, Encargado, Cliente, Complejo, Reserva, Servicio
+from .models import Cabania, Encargado, Cliente, Complejo, Reserva, Servicio, ReservaServicio
 
 class formCabania(forms.ModelForm):
     class Meta:
@@ -59,6 +59,15 @@ class formServicio(forms.ModelForm):
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio'}),
         }
 
+class formReservaServicio(forms.ModelForm):
+
+    class Meta:
+        model = ReservaServicio
+        fields = ('reserva', 'servicio')
+        widgets = {
+            'reserva': forms.Select(attrs={'class': 'form_select'}),
+            'servicio': forms.Select(attrs={'class': 'form_select'})
+        }
 
 class formReserva(forms.ModelForm):
     servicios = forms.ModelMultipleChoiceField(
@@ -78,3 +87,5 @@ class formReserva(forms.ModelForm):
             'seña': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio de la Seña'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio'}),
         }
+
+    ReservaServicioFormset = forms.inlineformset_factory(Reserva, ReservaServicio, form=formReservaServicio, extra=1)

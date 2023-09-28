@@ -23,31 +23,6 @@ def main(request):
     
     return render(request, 'main.html', context)
 
-'''
-def tabla_reservas(request):
-    reservas = Reserva.objects.all()
-
-    context = {'reservas': reservas}
-    return render(request, 'reservas.html', context)
-'''
-def tabla_clientes(request):
-    clientes = Cliente.objects.all()
-
-    context = {'clientes': clientes}
-    return render(request, 'clientes.html', context)
-
-def tabla_encargados(request):
-    encargados = Encargado.objects.all()
-
-    context = {'encargados': encargados}
-    return render(request, 'encargados.html', context)
-
-def tabla_cabanias(request):
-    cabanias = Cabania.objects.all()
-
-    context = {'cabanias': cabanias}
-    return render(request, 'cabanias.html', context)
-
 def detalle_cliente(request, cliente_id):
     cliente = Cliente.objects.get(id=cliente_id) #solo toma el id del cliente         #toma todos los atributos del cliente
 
@@ -96,162 +71,134 @@ def detalle_servicio(request, servicio_id):
     } 
     return render(request, 'detalle_servicio.html', context)
 
-#abm encargado
+#VISTAS ENCARGADO
 
-def modif_encargado(request, pk):
-    encargado = Encargado.objects.get(id=pk)
-    if request.method=='POST':
-        form = formEncargado(request.POST, instance=encargado)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_encargados'))
-        
-    else:
-        form = formEncargado(instance=encargado)
+class lista_encargados(ListView):
+    model = Encargado
+    template_name = 'lista_encargados.html'
+    context_object_name = 'encargados'
 
-    return render(request, 'form_encargado.html', {'form': form,'encargado': encargado})
+class nuevo_encargado(CreateView):
+    model = Encargado
+    form_class = formEncargado
+    template_name = 'form_encargado.html'
+    success_url = reverse_lazy('lista_encargados')
 
-def nuevo_encargado(request):
-    if request.method=='POST':
-        form = formEncargado(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_encargados'))
-        
-    else:
-        form = formEncargado()
-    
-    return render(request, 'form_encargado.html', {'form': form})
+class modif_encargado(UpdateView):
+    model = Encargado
+    form_class = formEncargado
+    template_name = 'form_encargado.html'
+    success_url = reverse_lazy('lista_encargados')
 
-def borrar_encargado(request, pk):
-    encargado = Encargado.objects.get(id=pk)
-    if request.method=='POST':
-        encargado.delete()
-        return HttpResponseRedirect(reverse('tabla_encargados'))
-    return render(request, 'conf_borrar_encargado.html', {'encargado': encargado})
+class borrar_encargado(DeleteView):
+    model = Encargado
+    template_name = 'conf_borrar_encargado.html'
+    success_url = reverse_lazy('lista_encargados')
 
-#abm cabañas
-def modif_cabania(request, pk):
-    cabania = Cabania.objects.get(id=pk)
-    if request.method=='POST':
-        form = formCabania(request.POST, instance=cabania)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_cabanias'))
-        
-    else:
-        form = formCabania(instance=cabania)
+#VISTAS DE CABAÑAS
 
-    return render(request, 'form_cabania.html', {'form': form,'cabania': cabania})
+class lista_cabanias(ListView):
+    model = Cabania
+    template_name = 'lista_cabanias.html'
+    context_object_name = 'cabanias'
 
-def nuevo_cabania(request):
-    if request.method=='POST':
-        form = formCabania(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_cabanias'))
-        
-    else:
-        form = formCabania()
-    
-    return render(request, 'form_cabania.html', {'form': form})
+class nuevo_cabania(CreateView):
+    model = Cabania
+    form_class = formCabania
+    template_name = 'form_cabania.html'
+    success_url = reverse_lazy('lista_cabanias')
 
-def borrar_cabania(request, pk):
-    cabania = Cabania.objects.get(id=pk)
-    if request.method=='POST':
-        cabania.delete()
-        return HttpResponseRedirect(reverse('tabla_cabanias'))
-    return render(request, 'conf_borrar_cabania.html', {'cabania': cabania})
+class modif_cabania(UpdateView):
+    model = Cabania
+    form_class = formCabania
+    template_name = 'form_cabania.html'
+    success_url = reverse_lazy('lista_cabanias')
 
-#abm cliente
-def modif_cliente(request, pk):
-    cliente = Cliente.objects.get(id=pk)
-    if request.method=='POST':
-        form = formCliente(request.POST, instance=cliente)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_clientes'))
-        
-    else:
-        form = formCliente(instance=cliente)
+class borrar_cabania(DeleteView):
+    model = Cabania
+    template_name = 'conf_borrar_cabania.html'
+    success_url = reverse_lazy('lista_cabanias')
+  
+#VISTAS DE CLIENTES
 
-    return render(request, 'form_cliente.html', {'form': form,'cliente': cliente})
+class lista_clientes(ListView):
+    model = Cliente
+    template_name = 'lista_clientes.html'
+    context_object_name = 'clientes'
 
-def nuevo_cliente(request):
-    if request.method=='POST':
-        form = formCliente(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('tabla_clientes'))
-        
-    else:
-        form = formCliente()
-    
-    return render(request, 'form_cliente.html', {'form': form})
+class nuevo_cliente(CreateView):
+    model = Cliente
+    form_class = formCliente
+    template_name = 'form_cliente.html'
+    success_url = reverse_lazy('lista_clientes')
 
-def borrar_cliente(request, pk):
-    cliente = Cliente.objects.get(id=pk)
-    if request.method=='POST':
-        cliente.delete()
-        return HttpResponseRedirect(reverse('tabla_cliente'))
-    return render(request, 'conf_borrar_cliente.html', {'cliente': cliente})
+class modif_cliente(UpdateView):
+    model = Cliente
+    form_class = formCliente
+    template_name = 'form_complejo.html'
+    success_url = reverse_lazy('lista_clientes')
 
-#abm complejo
-class tabla_complejos(ListView):
+class borrar_cliente(DeleteView):
+    model = Cliente
+    template_name = 'conf_borrar_cliente.html'
+    success_url = reverse_lazy('lista_clientes')
+  
+#VISTAS DE COMPLEJO
+class lista_complejos(ListView):
     model = Complejo
-    template_name = 'complejos.html'
+    template_name = 'lista_complejos.html'
     context_object_name = 'complejos'
 
 class nuevo_complejo(CreateView):
     model = Complejo
     form_class = formServicio
     template_name = 'form_complejo.html'
-    success_url = reverse_lazy('tabla_complejos')
+    success_url = reverse_lazy('lista_complejos')
 
 class modif_complejo(UpdateView):
     model = Complejo
     form_class = formServicio
     template_name = 'form_complejo.html'
-    success_url = reverse_lazy('tabla_complejos')
+    success_url = reverse_lazy('lista_complejos')
 
 class borrar_complejo(DeleteView):
     model = Complejo
     template_name = 'conf_borrar_complejo.html'
-    success_url = reverse_lazy('tabla_complejos')
+    success_url = reverse_lazy('lista_complejos')
     
-#abm servicios
-class tabla_servicios(ListView):
+#VISTAS DE SERVICIOS
+class lista_servicios(ListView):
     model = Servicio
-    template_name = 'servicios.html'
+    template_name = 'lista_servicios.html'
     context_object_name = 'servicios'
 
 class nuevo_servicio(CreateView):
     model = Servicio
     form_class = formServicio
     template_name = 'form_servicio.html'
-    success_url = reverse_lazy('tabla_servicios')
+    success_url = reverse_lazy('lista_servicios')
 
 class modif_servicio(UpdateView):
     model = Servicio
     form_class = formServicio
     template_name = 'form_servicio.html'
-    success_url = reverse_lazy('tabla_servicios')
+    success_url = reverse_lazy('lista_servicios')
 
 class borrar_servicio(DeleteView):
     model = Servicio
     template_name = 'conf_borrar_servicio.html'
-    success_url = reverse_lazy('tabla_servicios')
+    success_url = reverse_lazy('lista_servicios')
     
-#abm reservas
-class tabla_reservas(ListView):
+#VISTAS DE RESERVAS
+class lista_reservas(ListView):
     model = Reserva
-    template_name = 'reservas.html'
+    template_name = 'lista_reservas.html'
     context_object_name = 'reservas'
 class nuevo_reserva(CreateView):
     model = Reserva
     form_class = formReserva
     template_name = 'form_reserva.html'
-    success_url = reverse_lazy('tabla_reservas')
+    success_url = reverse_lazy('lista_reservas')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -276,7 +223,7 @@ class modif_reserva(UpdateView):
     model = Reserva
     form_class = formReserva
     template_name = 'form_reserva.html'
-    success_url = reverse_lazy('tabla_reservas')
+    success_url = reverse_lazy('lista_reservas')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -298,7 +245,7 @@ class modif_reserva(UpdateView):
 class borrar_reserva(DeleteView):
     model = Reserva
     template_name = 'conf_borrar_reserva.html'
-    success_url = reverse_lazy('tabla_reservas')
+    success_url = reverse_lazy('lista_reservas')
 
 def servicioReserva(request,reserva_id):
     reserva = Reserva.objects.get(id=reserva_id)

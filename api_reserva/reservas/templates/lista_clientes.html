@@ -1,6 +1,7 @@
 {% include 'navbar.html' %} 
 {% load static %} 
 {% block content %} 
+<div class="main">
 
 <h2 class="titulo">Clientes</h2>
 <div class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-primary" href="/clientes/clienteNuevo/">Añadir Cliente</a></div>
@@ -31,5 +32,7 @@
         {% endfor %} 
     </tbody>
 </table>
+
+</div>
 
 {% endblock %} 

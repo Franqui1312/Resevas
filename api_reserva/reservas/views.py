@@ -1,8 +1,9 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
-from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio
+from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio, ReservaServicio
 from .forms import formCabania, formEncargado, formCliente, formComplejo, formServicio, formReserva
 from django.views.generic import  CreateView, UpdateView, DeleteView, ListView
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 # Create your views here.
 
@@ -194,6 +195,20 @@ class lista_reservas(ListView):
     model = Reserva
     template_name = 'lista_reservas.html'
     context_object_name = 'reservas'
+
+    def get(self, request):
+        query = request.GET.get('q', '')
+        reservas = Reserva.objects.filter(
+            Q(cliente__apellido_nombre__icontains=query) |  # Búsqueda por nombre del cliente
+            Q(cliente__dni__icontains=query)             # Búsqueda por DNI del cliente
+        )
+
+        context = {
+            'reservas': reservas,
+            'query': query
+        }
+
+        return render(request, self.template_name, context)
 class nuevo_reserva(CreateView):
     model = Reserva
     form_class = formReserva
@@ -247,14 +262,27 @@ class borrar_reserva(DeleteView):
     template_name = 'conf_borrar_reserva.html'
     success_url = reverse_lazy('lista_reservas')
 
-def servicioReserva(request,reserva_id):
-    reserva = Reserva.objects.get(id=reserva_id)
-    servicios = reserva.servicios.all()
-    total_servicios = sum(servicio.precio for servicio in servicios)
+def servicioReserva(request, reserva_id):
+    try:
+        #reservaServicio = ReservaServicio.objects.get(id=reserva_id)
+        #reserva = reservaServicio.reserva
+        reserva = Reserva.objects.get(id=reserva_id)
+        servicios = reserva.servicios.all()
+        total_servicios = sum(servicio.precio for servicio in servicios)
 
-    context = {
-        'reserva' : reserva,
-        'total_servicios' : total_servicios
-    }
+        #print("Reserva Servicio:", reserva_servicio)
+        print("Reserva:", reserva)
+        print("Servicios:", servicios)
+        print("Total Servicios:", total_servicios)
 
-    return render(request, 'servicios-reserva.html', context)
+        context = {
+            #'reserva_servicio': reserva_servicio,
+            'reserva': reserva,
+            'total_servicios': total_servicios,
+        }
+
+        return render(request, 'servicios-reserva.html', context)
+    except ReservaServicio.DoesNotExist:
+        # Maneja el caso en el que no se encuentre la ReservaServicio
+        # Puedes redirigir a una página de error o realizar otra acción apropiada.
+        return render(request, 'error.html', {'message': 'ReservaServicio no encontrada'})

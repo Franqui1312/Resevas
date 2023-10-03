@@ -20,12 +20,36 @@
     --card-padding: 1.8rem;
     --padding-1: 1.2rem;
 
-    --box-shadow: 0 2rem 3rem var(--color-light);
+    --box-shadow: 0 1rem 2rem var(--color-light);
+
+    --bs-emphasis-color:var(--color-danger);
+    --bs-table-striped-color:var(--color-dark-variant)
+}
+body{
+    background-color: var(--color-background);
 }
 
 .main{
     padding: 3rem;
     font-family: 'poppins', sans-serif;
+}
+
+header{
+    background-color: var(--color-danger);
+    text-align: center;
+    color: #363949;
+    transition: ease 0.5s;
+    margin: 0rem;
+    height: 3.125rem;
+    font-family: 'poppins', sans-serif; 
+}
+
+header:hover{
+    color: var(--color-danger);
+}
+
+.table{
+    --bs-table-bg:var(--color-danger);
 }
 
 

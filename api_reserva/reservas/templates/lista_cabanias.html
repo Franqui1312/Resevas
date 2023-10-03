@@ -1,9 +1,21 @@
 {% include 'navbar.html' %} 
 {% load static %} 
 {% block content %} 
-    <h2 class="titulo">Cabañas</h2>
-    <div class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-primary" href="/cabanias/cabaniaNuevo/">Añadir Cabaña</a></div>
-    <table class="table table-striped table-hover">
+<div class="row">
+    <h2 class="col display-4 my-3">Cabañas</h2>
+
+    <div class=" col d-flex justify-content-end align-items-end mb-3">
+        <form method="GET">
+            <div class="input-group">
+                <input type="text" id="search" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar Cabaña...">
+                <button class="btn btn-primary text-light" type="submit"><img src="/static/img/search.svg"></button>
+    
+                <div class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-primary" href="/cabanias/cabaniaNuevo/">Añadir Cabaña</a></div>
+        </form>
+    </div>
+
+</div>
+    <table class="table table-striped table-hover" id="results">
         <thead>
             <tr>
                 <th>Nombre</th>

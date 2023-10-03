@@ -23,14 +23,6 @@ class Encargado(models.Model):
     def __str__(self):
         return self.apellido_nombre
 
-class Servicio(models.Model):
-    codigo = models.CharField(max_length=20)
-    descripcion = models.CharField(default="ninguna", max_length=150)
-    precio = models.FloatField(default=0, max_length=20)
-
-    def __str__(self):
-        return self.codigo
-
 class Complejo(models.Model):
     nombre = models.CharField(max_length=100)
     direccion = models.CharField(max_length=100)
@@ -50,6 +42,13 @@ class Cabania(models.Model):
     def __str__(self):
         return self.nombre
 
+class Servicio(models.Model):
+    codigo = models.CharField(max_length=20)
+    descripcion = models.CharField(default="ninguna", max_length=150)
+    precio = models.FloatField(default=0, max_length=20)
+
+    def __str__(self):
+        return self.codigo
 class Reserva(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     complejo = models.ForeignKey(Complejo, on_delete=models.CASCADE)

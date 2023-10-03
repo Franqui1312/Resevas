@@ -3,7 +3,6 @@
 :root{
     --font-family: 'poppins' sans-serif ;
     --color-primary: #6C9BCF;
-    --color-danger: #ff008c;
     --color-success: #1B9C85;
     --color-warning: #F7D060;
     --color-white: #fff;
@@ -20,31 +19,13 @@
     --card-padding: 1.8rem;
     --padding-1: 1.2rem;
 
-    --box-shadow: 0 2rem 3rem var(--color-light);
 }
 
-body{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--color-background);
-}
 
 nav{
     background-color: var(--color-background);
-    display: flex;
-    flex-direction: row;
-}
-
-.navbar{
-    color: var(--color-background);
-    border-radius: var(--border-radius-1);
     font-family: 'poppins', sans-serif;  
     transition: all 0.3s ease;
-}
-
-.nav-item{
-    border-radius: var(--card-border-radius);
 }
 
 .navbar :hover{
@@ -53,21 +34,9 @@ nav{
     transition: all 0.3s ease;
 }
 
-header{
-    background-color: var(--color-background);
-    color: var(--color-dark);
-    margin: 0rem;
-    height: 3.125rem;
-    font-family: 'poppins', sans-serif; 
-}
-
 header :hover{
-    color: #FF0060;
+    color:var(--color-background);
     transition:all 0.3s ease;
-}
-
-.contenedor-tablas{
-    display: flex;
 }
 
 .titulo{

@@ -43,19 +43,18 @@ class Cabania(models.Model):
         return self.nombre
 
 class Servicio(models.Model):
-    codigo = models.CharField(max_length=20)
+    nombre = models.CharField(max_length=20)
     descripcion = models.CharField(default="ninguna", max_length=150)
     precio = models.FloatField(default=0, max_length=20)
 
     def __str__(self):
-        return self.codigo
+        return self.nombre
 class Reserva(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     complejo = models.ForeignKey(Complejo, on_delete=models.CASCADE)
     cabania = models.ForeignKey(Cabania, on_delete=models.CASCADE, default=None)
     diaEntrada = models.DateField()
     diaSalida = models.DateField()
-    servicios = models.ManyToManyField(Servicio)
     seña = models.FloatField(default=0, max_length=12)
     precio = models.FloatField(default=0,max_length=12)
 
@@ -66,3 +65,7 @@ class Reserva(models.Model):
 class ReservaServicio(models.Model):
     reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"ReservaServicio {self.id}"

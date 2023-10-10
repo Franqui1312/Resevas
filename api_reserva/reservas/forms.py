@@ -17,10 +17,10 @@ class formCabania(forms.ModelForm):
 class formEncargado(forms.ModelForm):
     class Meta:
         model = Encargado
-        fields = ('dni','apellido_nombre', 'telefono', 'email')
+        fields = ('apellido_nombre','dni', 'telefono', 'email')
         widgets = {
-            'dni': forms.NumberInput(attrs={'class': 'form-control' , 'placeholder': 'ingrese su DNI'} ),
             'apellido_nombre': forms.TextInput(attrs={'class': 'form-control' , 'placeholder': 'Ingrese su Nombre y Apellido'}),
+            'dni': forms.NumberInput(attrs={'class': 'form-control' , 'placeholder': 'ingrese su DNI'} ),
             'telefono': forms.NumberInput(attrs={'class': 'form-control' , 'placeholder': 'Ingrese su Número Telefónico'}),
             'email': forms.EmailInput(attrs={'class': 'form-control' , 'placeholder': 'Ingrese su Correo Electrónico'}),
         }
@@ -52,39 +52,35 @@ class formComplejo(forms.ModelForm):
 class formServicio(forms.ModelForm):
     class Meta:
         model = Servicio
-        fields = ('codigo', 'descripcion', 'precio')
+        fields = ('nombre', 'descripcion', 'precio')
         widgets = {
-            'codigo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Nombre'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Nombre'}),
             'descripcion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la Descripción'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio'}),
         }
 
 class formReservaServicio(forms.ModelForm):
-
+    
     class Meta:
         model = ReservaServicio
-        fields = ('reserva', 'servicio')
+        fields = ('reserva','servicio','cantidad')
         widgets = {
-            'reserva': forms.Select(attrs={'class': 'form_select'}),
-            'servicio': forms.Select(attrs={'class': 'form_select'})
+            'reserva': forms.Select(attrs={'class': 'form-select'}),
+            'servicio': forms.Select(attrs={'class': 'form-select'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'ingrese la cantidad'}),
         }
 
 class formReserva(forms.ModelForm):
-    servicios = forms.ModelMultipleChoiceField(
-        queryset=Servicio.objects.all(),  # QuerySet para obtener todos los servicios disponibles
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check'}),  # Puedes usar CheckboxSelectMultiple para seleccionar múltiples opciones
-        required=False,  # Cambiar esto según las necesidades de validación
-    )
     class Meta:
         model = Reserva
-        fields = ('cliente', 'complejo', 'cabania', 'diaEntrada', 'diaSalida', 'servicios', 'seña', 'precio')
+        fields = ('cliente', 'complejo', 'cabania', 'diaEntrada', 'diaSalida','seña', 'precio')
         widgets = {
             'cliente': forms.Select(attrs={'class': 'form-select'}),
             'complejo': forms.Select(attrs={'class': 'form-select'}),
             'cabania': forms.Select(attrs={'class': 'form-select'}),
             'diaEntrada': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'diaSalida': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
-            'seña': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio de la Seña'}),
+            'seña': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la Seña'}),
             'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio'}),
         }
 

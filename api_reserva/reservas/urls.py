@@ -41,5 +41,5 @@ urlpatterns = [
     path('reservas/reservaModif/<int:pk>/', views.modif_reserva.as_view(), name='modif_reserva'),
     path('reservas/reservaBorrar/<int:pk>/', views.borrar_reserva.as_view(), name='borrar_reserva'),
 
-    path('reservas/reserva/serviciosReserva/<int:reserva_id>/', views.servicioReserva, name='serviciosReserva')
+    path('serviciosReserva/<int:reserva_id>/', views.DetalleReservaServicio.as_view(), name='serviciosReserva')
 ]

@@ -15,7 +15,7 @@
     <tbody>
         {% for servicio in servicios %} 
         <tr>
-            <td><a href="{% url 'detalle_servicio' servicio.id %}">{{ servicio.codigo }}</a></td>
+            <td><a href="{% url 'detalle_servicio' servicio.id %}">{{ servicio.nombre }}</a></td>
             <td>{{ servicio.descripcion }}</td>
             <td>{{ servicio.precio }}</td>
             <td class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-secondary" href="/servicios/servicioModif/{{ servicio.id }}">Modificar</a></td>

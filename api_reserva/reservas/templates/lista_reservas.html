@@ -1,5 +1,8 @@
 {% include 'navbar.html' %} 
 {% block content %}
+
+<div class="contenedor">
+
  <div class="row">
     <h2 class="col display-4 my-3">Reservas</h2>
 
@@ -7,9 +10,9 @@
         <form method="GET">
             <div class="input-group">
                 <input type="text" id="search" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar Reserva...">
-                <button class="btn btn-primary text-light" type="submit"><img src="/static/img/search.svg"></button>
+                <button class="lupa" type="submit"><span class="material-symbols-outlined">search</span></button>
     
-            <div class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-primary" href="/reservas/reservaNuevo/">Añadir Reserva</a></div>
+            <div class="d-flex justify-content-end align-items-end"><a class="botonPrimario" href="/reservas/reservaNuevo/">Añadir Reserva</a></div>
         </form>
     </div>
     
@@ -40,13 +43,15 @@
                 <td>{{ reserva.diaSalida }}</td>
                 <td>{{ reserva.seña }}</td>
                 <td>{{ reserva.precio }}</td>    
-                <td class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-secondary" href="/reservas/reservaModif/{{ reserva.id }}">Modificar</a></td>
-                <td><a class="btn btn-outline-secondary" href="/reservas/reservaBorrar/{{ reserva.id }}">Borrar</a></td>
+                <td class="d-flex justify-content-end align-items-end"><a class="botonSecundario" href="/reservas/reservaModif/{{ reserva.id }}">Modificar</a></td>
+                <td><a class="botonSecundario" href="/reservas/reservaBorrar/{{ reserva.id }}">Borrar</a></td>
             </tr>
             {% endfor %} 
         </tbody>
     </table>
 </div>
+
+
 
 {% endblock %} 
 

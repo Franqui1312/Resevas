@@ -129,6 +129,20 @@ class lista_clientes(ListView):
     template_name = 'lista_clientes.html'
     context_object_name = 'clientes'
 
+    def get(self, request):
+        query = request.GET.get('q', '')
+        clientes = Cliente.objects.filter(
+            Q(apellido_nombre__icontains=query)| # Búsqueda por nombre del cliente
+            Q(dni__icontains=query)             # Búsqueda por DNI del cliente
+        )
+
+        context = {
+            'clientes': clientes,
+            'query': query
+        }
+
+        return render(request, self.template_name, context)
+
 class nuevo_cliente(CreateView):
     model = Cliente
     form_class = formCliente
@@ -174,6 +188,19 @@ class lista_servicios(ListView):
     model = Servicio
     template_name = 'lista_servicios.html'
     context_object_name = 'servicios'
+
+    def get(self, request):
+        query = request.GET.get('q', '')
+        servicios = Servicio.objects.filter(
+            Q(nombre__icontains=query) # Búsqueda por nombre del cliente
+        )
+
+        context = {
+            'servicios': servicios,
+            'query': query
+        }
+
+        return render(request, self.template_name, context)
 
 class nuevo_servicio(CreateView):
     model = Servicio
@@ -263,56 +290,7 @@ class borrar_reserva(DeleteView):
     model = Reserva
     template_name = 'conf_borrar_reserva.html'
     success_url = reverse_lazy('lista_reservas')
-'''
-def servicioReserva(request, reserva_id):
-    try:
-        #reservaServicio = ReservaServicio.objects.get(id=reserva_id)
-        #reserva = reservaServicio.reserva
-        reserva = Reserva.objects.get(id=reserva_id)
-        servicios = reserva.servicios.all()
-        total_servicios = sum(servicio.precio for servicio in servicios)
 
-        #print("Reserva Servicio:", reserva_servicio)
-        print("Reserva:", reserva)
-        print("Servicios:", servicios)
-        print("Total Servicios:", total_servicios)
-
-        context = {
-            #'reserva_servicio': reserva_servicio,
-            'reserva': reserva,
-            'total_servicios': total_servicios,
-        }
-
-        return render(request, 'servicios-reserva.html', context)
-    except ReservaServicio.DoesNotExist:
-        # Maneja el caso en el que no se encuentre la ReservaServicio
-        # Puedes redirigir a una página de error o realizar otra acción apropiada.
-        return render(request, 'error.html', {'message': 'ReservaServicio no encontrada'})
-
-def servicioReserva(request, reserva_id):
-    context = {}  # Inicializa context vacío por defecto
-
-    try:
-        reserva_servicio = ReservaServicio.objects.get(id=reserva_id)
-        servicio = reserva_servicio.objects.all()
-        total_servicios = sum(servicio.precio for servicio in servicios)
-
-        print("Reserva Servicio:", reserva_servicio)
-        print("Servicio:", servicio)
-        print("Total Servicios:", total_servicios)
-
-        context = {
-            'reserva_servicio': reserva_servicio,
-            'total_servicios': total_servicios,
-        }
-
-    except ReservaServicio.DoesNotExist:
-        context = {
-            'alert': 'ReservaServicio no encontrada'
-        }
-
-    return render(request, 'servicios-reserva.html', context)
-    '''
 
 class DetalleReservaServicio(ListView):
     model = ReservaServicio

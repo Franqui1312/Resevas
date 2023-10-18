@@ -1,6 +1,9 @@
 {% include 'navbar.html' %} 
 {% load static %} 
-{% block content %} 
+{% block content %}
+
+<div class="contenedor">
+    
 <div class="row">
 
     <h2 class="col display-4 my-3">Clientes</h2>
@@ -9,9 +12,9 @@
         <form method="GET">
             <div class="input-group">
                 <input type="text" id="search" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar Cliente...">
-                <button class="btn btn-primary text-light" type="submit"><img src="/static/img/search.svg"></button>
+                <button class="lupa" type="submit"><span class="material-symbols-outlined">search</span></button>
                 
-                <div class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-primary" href="/clientes/clienteNuevo/">Añadir Cliente</a></div>
+                <div class="d-flex justify-content-end align-items-end"><a class="botonPrimario" href="/clientes/clienteNuevo/">Añadir Cliente</a></div>
         </form>
     </div>
 </div>
@@ -37,11 +40,13 @@
                 <td>{{ cliente.pais }}</td>
                 <td>{{ cliente.provincia }}</td>
                 <td>{{ cliente.localidad }}</td>
-                <td class="d-flex justify-content-end align-items-end"><a class="btn btn-outline-secondary" href="/clientes/clienteModif/{{ cliente.id }}"> Modificar</td>
-                <td><a class="btn btn-outline-secondary" href="/clientes/clienteBorrar/{{ cliente.id }}">Borrar</a></td>
+                <td class="d-flex justify-content-end align-items-end"><a class="botonSecundario" href="/clientes/clienteModif/{{ cliente.id }}"> Modificar</td>
+                <td><a class="botonSecundario" href="/clientes/clienteBorrar/{{ cliente.id }}">Borrar</a></td>
             {% endfor %} 
         </tbody>
     </table>
+
+</div>
 
 
 

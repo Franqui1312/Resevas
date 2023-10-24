@@ -1,14 +1,20 @@
 {% include 'navbar.html' %} 
 {% load static %} 
 {% block content %}
-<div class="row">
-    <h1 class="titulo">Encargados</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button class="btn btn-outline-primary mb-3" type="submit">Guardar</button>
-        <a class="btn btn-outline-secondary mb-3" href="{% url 'lista_encargados' %}">Cancelar</a>   
 
-    </form>
+<div class="formulario">
+    <div class="row">
+        <h1 >Encargados</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+
+            <div class="contenedorBotones">
+                <button class="botonSecundario" type="submit">Guardar</button>
+                <a class="botonSecundario" href="{% url 'lista_encargados' %}">Cancelar</a>   
+            </div>
+
+        </form>
+    </div>
 </div>
 {% endblock %} 

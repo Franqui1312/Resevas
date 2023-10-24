@@ -2,15 +2,15 @@
 {% load static %} 
 {% block content %}
 
-<div class="detalle">
+<div class="confBorrar">
     <h1>Borrar Complejo</h1>
 
     <p>¿Esta seguro de borrar el complejo <b>{{ complejo.nombre}}</b>?</p>
     <form method="post">
         {% csrf_token %}
-        <div class="button-conteiner">
-            <button type="submit" class="btn btn-outline-secondary">Aceptar</button>
-            <a type="submit" class="btn btn-outline-secondary" href="/complejos/">Cancelar</a>
+        <div class="contenedorBotones">
+            <button type="submit" class="botonSecundario">Aceptar</button>
+            <a type="submit" class="botonSecundario" href="/complejos/">Cancelar</a>
         </div>
     </form>
 </div>

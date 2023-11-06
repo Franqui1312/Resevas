@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib.auth.views import LoginView
 from datetime import date
+from django.contrib.auth import logout
 
 # Create your views here.
 
@@ -151,7 +152,7 @@ class lista_clientes(ListView):
     model = Cliente
     template_name = 'lista_clientes.html'
     context_object_name = 'clientes'
-    paginate_by = 10
+    paginate_by = 2
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -382,4 +383,5 @@ class DetalleReservaServicio(ListView):
     
 def Logout(request):
     logout(request)
-    return redirect('')
+    return redirect('/')
+

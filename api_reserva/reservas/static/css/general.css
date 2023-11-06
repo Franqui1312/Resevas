@@ -2,16 +2,13 @@
 
 :root{
     --font-family: 'poppins' sans-serif ;
-    --color-primary: #b3efb2;
-    --color-danger: #7a9e7e;
-    --color-success: #aa4465;
-    --color-warning: #31493c;
+    --color-primary: #9381ff;
+    --color-danger: #e16f7c;
     --color-white: #fff;
-    --color-info-dark: #7d8da1;
-    --color-dark: #363949;
-    --color-light: rgba(132, 139, 200, 0.18);
+    --color-dark: #000;
+
     --color-dark-variant: #E8F1F2;
-    --color-background: #E8F1F2;
+    --color-background: #e9e9e9;
 
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
@@ -26,9 +23,37 @@
     --bs-table-striped-color:var(--color-dark-variant)
 }
 
+/* modo oscuro */
+.dark-mode-variables{
+    --color-primary:#9381ff;
+    --color-danger:#e16f7c;
+
+    --color-white: #000;
+    --color-dark: #fff;
+
+    --color-dark-variant: #E8F1F2;
+    --color-background: #1d1d1d;
+}
+
+.contendorTodo{
+    height: 100%;
+    width: 100%;
+    background-color: var(--color-white);
+}
+
+.contenedor{
+    background-color: var(--color-white);
+}
+
+/* textos */
+
+.detalle h1,h3,p {
+    color: var(--color-dark);
+}
+
 /* encabezado */
 .navbar{
-    background-color: #fff;
+    background-color: var(--color-white);
     display: flex;
     margin: auto;
 }
@@ -39,9 +64,10 @@
 
 
 header{
-    background-color:#fff;
+    background-color:var(--color-white);
     transition: ease 0.5s;
     margin: 0rem;
+    padding: 0rem;
     height: 3.125rem;
     font-family: 'poppins', sans-serif; 
     text-align: center;
@@ -49,12 +75,12 @@ header{
 
 
 header h1{
-    color: #000;
+    color: var(--color-dark);
     margin-top: 1rem;
 }
 
 header span{
-    color: #9381ff;
+    color: var(--color-primary);
     transition: ease .8s;
 }
 
@@ -82,23 +108,23 @@ header span{
     vertical-align: middle;
     cursor: pointer;
 
-    border: 0.1rem solid #9381ff;
+    border: 0.1rem solid var(--color-primary);
     border-radius: var(--border-radius-1);
-    background-color: #fff;
+    background-color: var(--color-white);
 
     user-select: none;
     transition:ease-in-out 0.35s all;
 
     width: 10rem;
     text-decoration: none;
-    color: #9381ff;
+    color: var(--color-primary);
 }
 
 .botonPrimario:hover{
     background-position: 100% 100%;
-    color: #fff;
-    background-color: #9381ff;
-    box-shadow: 0.05rem 0.05rem 1rem #9381ff;
+    color: var(--color-white);
+    background-color:  var(--color-primary);
+    box-shadow: 0.05rem 0.05rem 1rem var(--color-primary);
 }
 
 .botonSecundario{
@@ -128,13 +154,13 @@ header span{
 
 .botonSecundario:hover{
     background-position: 100% 100%;
-    color: #fff;
+    color: var(--color-white);
     background-color: #e16f7c;
     box-shadow: 0.05rem 0.05rem 1rem #e16f7c;
 }
 
 .lupa{
-    background-color: #fff;
+    background-color: var(--color-white);
     border:none;
     border-radius: 50%;
     transition: ease 0.5s;
@@ -146,7 +172,7 @@ header span{
 .lupa:hover{
     background-color: #e16f7c;
     box-shadow: 0.05rem 0.05rem 1rem #e16f7c;
-    color: #fff;
+    color: var(--color-white);
 }
 
 /* tablas */
@@ -158,20 +184,20 @@ header span{
 
 
 table a{
-    color: #9381ff;
+    color: var(--color-primary);
     text-decoration: none;
     transition: ease 0.3s;
 }
 
 table a:hover{
-    color: #e16f7c;
+    color: var(--color-danger);
 }
 
 /* Detalles*/
 
 .contenedorDetalle{
-    margin: 0;
-    background-color: #fcfcfc;
+    margin: 0rem;
+    background-color: var(--color-background);
     height:100vh;
 }
 
@@ -180,9 +206,9 @@ table a:hover{
     height: 65vh;
     margin: auto;
     margin-top: 2rem;
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 2.5rem;
-    box-shadow: 0.05rem 0.05rem 4rem #e9e9e9;
+    box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
     transition: ease 0.5s;
 }
 
@@ -211,9 +237,9 @@ table a:hover{
     width: 80%;
     margin: auto;
     margin-top: 2rem;
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 2.5rem;
-    box-shadow: 0.05rem 0.05rem 4rem #e9e9e9;
+    box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
 }
 
 p{
@@ -250,9 +276,9 @@ h3{
     height: 65vh;
     margin: auto;
     margin-top: 2rem;
-    background-color: #fff;
+    background-color: var(--color-background);
     border-radius: 2.5rem;
-    box-shadow: 0.05rem 0.05rem 4rem #e9e9e9;
+    box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
     font-family: 'poppins', sans-serif;
     transition: ease 0.5s;
 }
@@ -284,9 +310,9 @@ h3{
     height:45vh;
     margin: auto;
     margin-top: 2rem;
-    background-color: #ffffff;
+    background-color: var(--color-white);
     border-radius: 2.5rem;
-    box-shadow: 0.05rem 0.05rem 4rem #e9e9e9;
+    box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
     transition: ease 0.5s;
 }
 
@@ -298,7 +324,7 @@ h3{
     width: 95%;
     height: 5vh;
     background-color: #9381ff;
-    color: #fff;
+    color: var(--color-white);
     margin: auto;
     border-radius: 2.5rem;
     display: flex;
@@ -320,9 +346,9 @@ h3{
     top: 5rem;
     margin: auto;
     margin-top: 15vh;
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 2.5rem;
-    box-shadow: 0.05rem 0.05rem 4rem #e9e9e9;
+    box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
     transition: ease 0.5s;
     font-family: 'poppins', sans-serif;
 }
@@ -390,7 +416,7 @@ h3{
 
 .contenedorUsuario div a{
     text-decoration: none;
-    color: #000;
+    color: var(--color-dark);
     transition: ease .8s;
     margin-top: -1rem;
     font-size: .7rem;

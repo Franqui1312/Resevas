@@ -1,9 +1,13 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse
+from typing import Any
+from django.db.models.query import QuerySet
+from django.shortcuts import render, HttpResponseRedirect, reverse, redirect
 from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio, ReservaServicio
 from .forms import formCabania, formEncargado, formCliente, formComplejo, formServicio, formReserva
 from django.views.generic import  CreateView, UpdateView, DeleteView, ListView
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.contrib.auth.views import LoginView
+from datetime import date
 
 # Create your views here.
 
@@ -80,6 +84,15 @@ class lista_encargados(ListView):
     model = Encargado
     template_name = 'lista_encargados.html'
     context_object_name = 'encargados'
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('q','')
+        encargados = Encargado.objects.filter(
+            Q(apellido_nombre__icontains=query) |
+            Q(dni__icontains=query)
+        )
+        return encargados
 
 class nuevo_encargado(CreateView):
     model = Encargado
@@ -104,6 +117,16 @@ class lista_cabanias(ListView):
     model = Cabania
     template_name = 'lista_cabanias.html'
     context_object_name = 'cabanias'
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
+        cabanias = Cabania.objects.filter(
+            Q(nombre__contains = query) |
+            Q(tipo__icontains = query)
+        )
+
+        return cabanias
 
 class nuevo_cabania(CreateView):
     model = Cabania
@@ -128,20 +151,17 @@ class lista_clientes(ListView):
     model = Cliente
     template_name = 'lista_clientes.html'
     context_object_name = 'clientes'
+    paginate_by = 10
 
-    def get(self, request):
-        query = request.GET.get('q', '')
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
         clientes = Cliente.objects.filter(
             Q(apellido_nombre__icontains=query)| # Búsqueda por nombre del cliente
-            Q(dni__icontains=query)             # Búsqueda por DNI del cliente
+            Q(dni__icontains=query) |
+            Q(telefono__icontains=query)            # Búsqueda por DNI del cliente
         )
 
-        context = {
-            'clientes': clientes,
-            'query': query
-        }
-
-        return render(request, self.template_name, context)
+        return  clientes
 
 class nuevo_cliente(CreateView):
     model = Cliente
@@ -165,6 +185,15 @@ class lista_complejos(ListView):
     model = Complejo
     template_name = 'lista_complejos.html'
     context_object_name = 'complejos'
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
+        complejos = Complejo.objects.filter(
+            Q(nombre__icontains=query) 
+        )
+
+        return complejos
 
 class nuevo_complejo(CreateView):
     model = Complejo
@@ -188,19 +217,15 @@ class lista_servicios(ListView):
     model = Servicio
     template_name = 'lista_servicios.html'
     context_object_name = 'servicios'
+    paginate_by = 5
 
-    def get(self, request):
-        query = request.GET.get('q', '')
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
         servicios = Servicio.objects.filter(
-            Q(nombre__icontains=query) # Búsqueda por nombre del cliente
+            Q(nombre__icontains=query) 
         )
+        return servicios
 
-        context = {
-            'servicios': servicios,
-            'query': query
-        }
-
-        return render(request, self.template_name, context)
 
 class nuevo_servicio(CreateView):
     model = Servicio
@@ -224,20 +249,16 @@ class lista_reservas(ListView):
     model = Reserva
     template_name = 'lista_reservas.html'
     context_object_name = 'reservas'
+    paginate_by = 2
 
-    def get(self, request):
-        query = request.GET.get('q', '')
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
         reservas = Reserva.objects.filter(
             Q(cliente__apellido_nombre__icontains=query) |  # Búsqueda por nombre del cliente
             Q(cliente__dni__icontains=query)             # Búsqueda por DNI del cliente
         )
 
-        context = {
-            'reservas': reservas,
-            'query': query
-        }
-
-        return render(request, self.template_name, context)
+        return reservas
 class nuevo_reserva(CreateView):
     model = Reserva
     form_class = formReserva
@@ -250,7 +271,9 @@ class nuevo_reserva(CreateView):
             context['formset'] = formReserva.ReservaServicioFormset(self.request.POST)
         else:
             context['formset'] = formReserva.ReservaServicioFormset()
+
         return context
+
     
     def form_valid(self, form):
         context = self.get_context_data()
@@ -262,6 +285,27 @@ class nuevo_reserva(CreateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form))
+        
+    def total(self):
+        reserva = Reserva.objects.get(pk=id)
+        cabania = reserva.cabania.precio
+        entrada = reserva.diaEntrada
+        salida = reserva.diaSalida
+
+        cantidad_dias = (salida - entrada).days 
+
+        total_cabania = cabania * 2
+
+        context = {
+            'reserva': reserva,
+            'cabania': cabania,
+            'cantidad_dias': cantidad_dias,
+            'total_cabania': total_cabania
+        }
+
+        return context
+        
+    
 
 class modif_reserva(UpdateView):
     model = Reserva
@@ -271,6 +315,11 @@ class modif_reserva(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        
+        total_context = self.total()
+        context.update(total_context)
+
         if self.request.POST:
             context['formset'] = formReserva.ReservaServicioFormset(self.request.POST, instance=self.object)
         else:
@@ -280,11 +329,38 @@ class modif_reserva(UpdateView):
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+
         if formset.is_valid() and form.is_valid():
             formset.save()
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form))
+        
+    def total(self):
+        reserva = self.object
+        cabania = reserva.cabania.precio
+
+        entrada = reserva.diaEntrada #dia entrada
+        salida = reserva.diaSalida  #dia salida
+
+        cantidad_dias = (salida - entrada).days #calculo de la diferencia entre dia de entrada y salida
+
+        total_cabania = cabania * cantidad_dias #calculo entre el precio de la cabaña y la cantidad de dias
+
+        total_servicios = 0 #calculo sobre el total de servicios
+
+        total_reserva = total_cabania + total_servicios #calculo sobre el total de la reserva
+
+        context = {
+            'reserva': reserva,
+            'cabania': cabania,
+            'cantidad_dias': cantidad_dias,
+            'total_cabania': total_cabania,
+            'total_servicios': total_servicios,
+            'total_reserva': total_reserva,
+        }
+
+        return context
 
 class borrar_reserva(DeleteView):
     model = Reserva
@@ -302,3 +378,8 @@ class DetalleReservaServicio(ListView):
         # Filtrar los objetos ReservaServicio relacionados con la reserva específica
         queryset = ReservaServicio.objects.filter(reserva_id=reserva_id)
         return queryset 
+    
+    
+def Logout(request):
+    logout(request)
+    return redirect('')

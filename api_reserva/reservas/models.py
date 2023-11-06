@@ -56,7 +56,6 @@ class Reserva(models.Model):
     diaEntrada = models.DateField()
     diaSalida = models.DateField()
     seña = models.FloatField(default=0, max_length=12)
-    precio = models.FloatField(default=0,max_length=12)
 
     def __str__(self):
         return self.cliente.apellido_nombre
@@ -65,7 +64,6 @@ class Reserva(models.Model):
 class ReservaServicio(models.Model):
     reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"ReservaServicio {self.id}"

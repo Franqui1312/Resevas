@@ -63,17 +63,16 @@ class formReservaServicio(forms.ModelForm):
     
     class Meta:
         model = ReservaServicio
-        fields = ('reserva','servicio','cantidad')
+        fields = ('reserva','servicio')
         widgets = {
             'reserva': forms.Select(attrs={'class': 'form-select'}),
             'servicio': forms.Select(attrs={'class': 'form-select'}),
-            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'ingrese la cantidad'}),
         }
 
 class formReserva(forms.ModelForm):
     class Meta:
         model = Reserva
-        fields = ('cliente', 'complejo', 'cabania', 'diaEntrada', 'diaSalida','seña', 'precio')
+        fields = ('cliente', 'complejo', 'cabania', 'diaEntrada', 'diaSalida','seña')
         widgets = {
             'cliente': forms.Select(attrs={'class': 'form-select'}),
             'complejo': forms.Select(attrs={'class': 'form-select'}),
@@ -81,7 +80,6 @@ class formReserva(forms.ModelForm):
             'diaEntrada': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'diaSalida': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'seña': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la Seña'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Precio'}),
         }
 
     ReservaServicioFormset = forms.inlineformset_factory(Reserva, ReservaServicio, form=formReservaServicio, extra=1)

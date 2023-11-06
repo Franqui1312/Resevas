@@ -24,11 +24,9 @@
                 <th>DNI</th>
                 <th>Complejo</th>
                 <th>Cabaña</th>
-                <th>Servicios</th>
                 <th>Día de Entrada</th>
                 <th>Día de Salida</th>
                 <th>Seña</th>
-                <th>Precio</th>
             </tr>       
         </thead>
         <tbody>
@@ -38,17 +36,38 @@
                 <td>{{reserva.cliente.dni}}</td>
                 <td>{{ reserva.complejo }}</td>
                 <td>{{ reserva.cabania }}</td>
-                <td><a href="{% url 'serviciosReserva' reserva.id %}">ver detalle</a></td>
                 <td>{{ reserva.diaEntrada }}</td>
                 <td>{{ reserva.diaSalida }}</td>
                 <td>{{ reserva.seña }}</td>
-                <td>{{ reserva.precio }}</td>    
                 <td class="d-flex justify-content-end align-items-end"><a class="botonSecundario" href="/reservas/reservaModif/{{ reserva.id }}">Modificar</a></td>
                 <td><a class="botonSecundario" href="/reservas/reservaBorrar/{{ reserva.id }}">Borrar</a></td>
             </tr>
             {% endfor %} 
         </tbody>
     </table>
+
+    <div class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <a class="botonPrimario" href="?page=1">Primera</a>
+            <a class="botonPrimario" href="?page={{ page_obj.previous_page_number }}">
+                Anterior
+            </a>
+        {% endif %}
+    
+        <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+            {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+    
+        {% if page_obj.has_next %}
+            <a class="botonPrimario" href="?page={{ page_obj.next_page_number }}">
+                Siguiente
+            </a>
+            <a class="botonPrimario" href="?page={{ page_obj.paginator.num_pages }}">
+                Última
+            </a>
+        {% endif %}
+    </div>
+    
 </div>
 
 

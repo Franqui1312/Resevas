@@ -31,6 +31,17 @@
                 </tbody>
             </table>
 
+            <div class="totales">
+                <h3>Totales</h3>
+
+                <p><strong>Precio Cabaña: </strong> {{ reserva.cabania.precio}}</p>
+                <p><strong>Cantidad Dias: </strong>{{ cantidad_dias }}</p>
+                <p><strong>Total Cabaña: </strong>{{ total_cabania }}</p>
+                <p><strong>Total Servicios: </strong>{{ total_servicios }}</p>
+                
+                <div><p><strong>Total Reserva: </strong>{{ total_reserva}}</p></div>
+            </div>
+
             <div class="contenedorBotones">
                 <button class="botonSecundario" type="submit">Guardar</button>
                 <a class="botonSecundario" href="{% url 'lista_reservas' %}">Cancelar</a>

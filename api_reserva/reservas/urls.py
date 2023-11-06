@@ -1,6 +1,7 @@
 
 from django.urls import path
 from . import views
+from django.contrib.auth.views import LoginView
 
 urlpatterns = [
     path('', views.main, name='main'),
@@ -41,5 +42,6 @@ urlpatterns = [
     path('reservas/reservaModif/<int:pk>/', views.modif_reserva.as_view(), name='modif_reserva'),
     path('reservas/reservaBorrar/<int:pk>/', views.borrar_reserva.as_view(), name='borrar_reserva'),
 
-    path('serviciosReserva/<int:reserva_id>/', views.DetalleReservaServicio.as_view(), name='serviciosReserva')
+    path('login/', views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', views.Logout, name='logout'),
 ]

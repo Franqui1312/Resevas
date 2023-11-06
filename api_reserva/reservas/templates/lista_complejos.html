@@ -40,5 +40,27 @@
     </tbody>
 </table>
 
+<div class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+        <a class="botonPrimario" href="?page=1">Primera</a>
+        <a class="botonPrimario" href="?page={{ page_obj.previous_page_number }}">
+            Anterior
+        </a>
+    {% endif %}
+
+    <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+        {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a class="botonPrimario" href="?page={{ page_obj.next_page_number }}">
+            Siguiente
+        </a>
+        <a class="botonPrimario" href="?page={{ page_obj.paginator.num_pages }}">
+            Última
+        </a>
+    {% endif %}
+</div>
+
 </div>
 {% endblock %} 

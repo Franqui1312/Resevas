@@ -33,7 +33,20 @@
                 <li class="nav-item">
                     <a class="botonPrimario" href="/complejos">Complejos</a>
                 </li>
+
             </ul>
+            <div class="contenedorUsuario">
+        
+                <span class="material-symbols-outlined">
+                        account_circle
+                </span>
+                
+                <div>
+                    <h4 class="user">{{request.user.username}}</h4>
+                    <a href="/logout/">Logout</a>
+                </div>
+        
+            </div>
         </div>
     </div>
 </nav>

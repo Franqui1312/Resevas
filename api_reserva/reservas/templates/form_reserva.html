@@ -2,52 +2,56 @@
 {% load static %} 
 {% block content %}
 
-<div class="formulario">
+<div class="contenedorForm">
 
-    <div class="row">
-        <h1 class="titulo">Reservas</h1>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{form.as_p}}
+    <div class="formulario">
 
-            {{ formset.management_form }}
-            <h3>Servicios</h3>
+        <div class="row">
+            <h1 class="titulo">Reservas</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
 
-            <table class="table table-striped table-hover">
-                <thead class="bg-dark text-light">
-                    <th>Id</th>
-                    <th></th><th></th><th></th>
-                    <th>¿Borrar?</th>
-                </thead>
-                <tbody>
-                {% for form in formset %}
-                <tr>
-                    <td>{{ form.id.value }}</td>
-                    {% for field in form %}
-                        <td>{{ field }}</td>
+                {{ formset.management_form }}
+                <h3>Servicios</h3>
+
+                <table class="table table-striped table-hover">
+                    <thead class="bg-dark text-light">
+                        <th>Id</th>
+                        <th></th><th></th><th></th>
+                        <th>¿Borrar?</th>
+                    </thead>
+                    <tbody>
+                    {% for form in formset %}
+                    <tr>
+                        <td>{{ form.id.value }}</td>
+                        {% for field in form %}
+                            <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
                     {% endfor %}
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
-            <div class="totales">
-                <h3>Totales</h3>
+                <div class="totales">
+                    <h3>Totales</h3>
 
-                <p><strong>Precio Cabaña: </strong> {{ reserva.cabania.precio}}</p>
-                <p><strong>Cantidad Dias: </strong>{{ cantidad_dias }}</p>
-                <p><strong>Total Cabaña: </strong>{{ total_cabania }}</p>
-                <p><strong>Total Servicios: </strong>{{ total_servicios }}</p>
-                
-                <div><p><strong>Total Reserva: </strong>{{ total_reserva}}</p></div>
-            </div>
+                    <p><strong>Precio Cabaña: </strong> {{ reserva.cabania.precio}}</p>
+                    <p><strong>Cantidad Dias: </strong>{{ cantidad_dias }}</p>
+                    <p><strong>Total Cabaña: </strong>{{ total_cabania }}</p>
+                    <p><strong>Total Servicios: </strong>{{ total_servicios }}</p>
+                    
+                    <div><p><strong>Total Reserva: </strong>{{ total_reserva}}</p></div>
+                </div>
 
-            <div class="contenedorBotones">
-                <button class="botonSecundario" type="submit">Guardar</button>
-                <a class="botonSecundario" href="{% url 'lista_reservas' %}">Cancelar</a>
-            </div>
+                <div class="contenedorBotones">
+                    <button class="botonSecundario" type="submit">Guardar</button>
+                    <a class="botonSecundario" href="{% url 'lista_reservas' %}">Cancelar</a>
+                </div>
 
-        </form>
+            </form>
+        </div>
+
     </div>
 
 </div>

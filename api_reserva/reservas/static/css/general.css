@@ -43,11 +43,12 @@
 
 .contenedor{
     background-color: var(--color-white);
+    height: 100vh;
 }
 
 /* textos */
 
-.detalle h1,h3,p {
+.detalle h1,h3,h4,p {
     color: var(--color-dark);
 }
 
@@ -64,11 +65,9 @@
 
 
 header{
+    position: relative;
     background-color:var(--color-white);
-    transition: ease 0.5s;
-    margin: 0rem;
-    padding: 0rem;
-    height: 3.125rem;
+    height: 4rem;
     font-family: 'poppins', sans-serif; 
     text-align: center;
 }
@@ -76,7 +75,11 @@ header{
 
 header h1{
     color: var(--color-dark);
-    margin-top: 1rem;
+
+    background-color: var(--color-white);
+
+    position: relative;
+    top: 1rem;
 }
 
 header span{
@@ -160,6 +163,7 @@ header span{
 }
 
 .lupa{
+    color: var(--color-dark);
     background-color: var(--color-white);
     border:none;
     border-radius: 50%;
@@ -197,15 +201,18 @@ table a:hover{
 
 .contenedorDetalle{
     margin: 0rem;
+    margin-top: -2rem;
+    padding: 0rem;
     background-color: var(--color-background);
     height:100vh;
 }
 
 .detalle{
+    position: relative;
     width: 80%;
     height: 65vh;
     margin: auto;
-    margin-top: 2rem;
+    top: 5rem;
     background-color: var(--color-white);
     border-radius: 2.5rem;
     box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
@@ -231,12 +238,26 @@ table a:hover{
     padding-top: 0.02rem;
 }
 
+/* listas */
+
+.col.display-4.my-3{
+    color: var(--color-dark);
+}
+
 /* formularios */
 
+.contenedorForm{
+    height: 100vh;
+    width: 100%;
+
+    background-color: var(--color-background);
+}
+
 .formulario{
+    position: relative;
+    top: 2rem;
     width: 80%;
     margin: auto;
-    margin-top: 2rem;
     background-color: var(--color-white);
     border-radius: 2.5rem;
     box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
@@ -249,6 +270,7 @@ p{
 
 
 .formulario .row h1{
+    color: var(--color-dark);
     font-family: 'poppins', sans-serif;
     text-align: center;
     margin-top: 1rem;
@@ -379,7 +401,7 @@ h3{
 /* contenedor usuario */
 
 .contenedorUsuario{
-    color: #000;
+    color: var(--color-dark);
 
     display: flex;
     flex-direction: row;
@@ -398,15 +420,17 @@ h3{
     margin-right: .2rem;
     font-size: 2rem;
     background-color: transparent;
+    transition: ease .5s;
 }
 
 .contenedorUsuario h4{
     font-size: 1.3rem;
     margin-top: .3rem;
+    transition: ease .5s;
 }
 
-.contenedorUsuario:hover{
-    color: #9381ff;
+.contenedorUsuario :hover{
+    color: var(--color-primary);
 }
 
 .contenedorUsuario div{
@@ -428,4 +452,53 @@ h3{
     font-size: 1.5rem;
 
     text-shadow:0.05rem 0.05rem 2rem #e16f7c;
+}
+
+/* boton dark mode */
+
+#botonDarkMode{
+    color: var(--color-primary);
+    margin-top: .5rem;
+}
+
+body.dark-mode-variables #results {
+    background-color: var(--color-background); /* Fondo oscuro para la tabla */
+    color: #fff; /* Texto blanco en el modo oscuro */
+}
+
+body.dark-mode-variables #results th, body.dark-mode-variables #results td {
+    background-color: var(--color-background); /* Fondo oscuro para la tabla */
+    color: var(--color-dark); /* Texto blanco en el modo oscuro */
+    border: none;
+}
+
+/* scroll bar / "barra de desplazamiento" para los hincha de boca */
+
+/* Estilo para la barra de desplazamiento en modo normal */
+::-webkit-scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento vertical */
+    height: 12px; /* Altura de la barra de desplazamiento horizontal */
+  }
+  
+  /* Estilo para el riel de la barra de desplazamiento en modo normal */
+  ::-webkit-scrollbar-track {
+    background: var(--color-white); /* Color del riel */
+  }
+  
+  /* Estilo para el pulgar (la parte arrastrable) de la barra de desplazamiento en modo normal */
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary); /* Color del pulgar */
+    border-radius: 6px; /* Radio de borde del pulgar */
+  }
+  
+  /* Estilo para el pulgar (la parte arrastrable) de la barra de desplazamiento cuando se pasa el ratón por encima */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-background); /* Cambiar color del pulgar en el hover */
+  }
+  
+
+/* paginacion */
+
+.pagination.justify-content-center span{
+    color: #9381ff;
 }

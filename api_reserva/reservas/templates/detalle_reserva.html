@@ -5,6 +5,7 @@
 <div class="contenedorDetalle">
     <div class="detalle">
         <h1>Detalle Reserva</h1>
+        <a href="{% url 'factura' reserva_id=reserva.id %}">Descargar CSV</a>
 
         <p><strong>Cliente: </strong>{{ reserva.cliente.apellido_nombre }}</p>
         <p><strong>Complejo: </strong>{{ reserva.complejo }}</p>

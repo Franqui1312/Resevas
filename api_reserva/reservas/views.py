@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.contrib.auth.views import LoginView
 from datetime import date
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin 
 
 # Create your views here.
 
@@ -81,7 +82,8 @@ def detalle_servicio(request, servicio_id):
 
 #VISTAS ENCARGADO
 
-class lista_encargados(ListView):
+class lista_encargados(LoginRequiredMixin,ListView):
+    login_url = "/login/"
     model = Encargado
     template_name = 'lista_encargados.html'
     context_object_name = 'encargados'
@@ -95,26 +97,30 @@ class lista_encargados(ListView):
         )
         return encargados
 
-class nuevo_encargado(CreateView):
+class nuevo_encargado(LoginRequiredMixin,CreateView):
+    login_url = "/login/"
     model = Encargado
     form_class = formEncargado
     template_name = 'form_encargado.html'
     success_url = reverse_lazy('lista_encargados')
 
-class modif_encargado(UpdateView):
+class modif_encargado(LoginRequiredMixin, UpdateView):
+    login_url = "/login/"
     model = Encargado
     form_class = formEncargado
     template_name = 'form_encargado.html'
     success_url = reverse_lazy('lista_encargados')
 
-class borrar_encargado(DeleteView):
+class borrar_encargado(LoginRequiredMixin, DeleteView):
+    login_url = "/login/"
     model = Encargado
     template_name = 'conf_borrar_encargado.html'
     success_url = reverse_lazy('lista_encargados')
 
 #VISTAS DE CABAÑAS
 
-class lista_cabanias(ListView):
+class lista_cabanias(LoginRequiredMixin, ListView):
+    login_url = "/login/"
     model = Cabania
     template_name = 'lista_cabanias.html'
     context_object_name = 'cabanias'
@@ -129,30 +135,34 @@ class lista_cabanias(ListView):
 
         return cabanias
 
-class nuevo_cabania(CreateView):
+class nuevo_cabania(LoginRequiredMixin, CreateView):
+    login_url = "/login/"
     model = Cabania
     form_class = formCabania
     template_name = 'form_cabania.html'
     success_url = reverse_lazy('lista_cabanias')
 
-class modif_cabania(UpdateView):
+class modif_cabania(LoginRequiredMixin, UpdateView):
+    login_url = "/login/"
     model = Cabania
     form_class = formCabania
     template_name = 'form_cabania.html'
     success_url = reverse_lazy('lista_cabanias')
 
-class borrar_cabania(DeleteView):
+class borrar_cabania(LoginRequiredMixin, DeleteView):
+    LoginRequiredMixin = "/login/"
     model = Cabania
     template_name = 'conf_borrar_cabania.html'
     success_url = reverse_lazy('lista_cabanias')
   
 #VISTAS DE CLIENTES
 
-class lista_clientes(ListView):
+class lista_clientes(LoginRequiredMixin, ListView):
+    login_url = "/login/"
     model = Cliente
     template_name = 'lista_clientes.html'
     context_object_name = 'clientes'
-    paginate_by = 2
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -164,25 +174,29 @@ class lista_clientes(ListView):
 
         return  clientes
 
-class nuevo_cliente(CreateView):
+class nuevo_cliente(LoginRequiredMixin, CreateView):
+    login_url = "/login/"
     model = Cliente
     form_class = formCliente
     template_name = 'form_cliente.html'
     success_url = reverse_lazy('lista_clientes')
 
-class modif_cliente(UpdateView):
+class modif_cliente(LoginRequiredMixin, UpdateView):
+    login_url = "/login/"
     model = Cliente
     form_class = formCliente
     template_name = 'form_complejo.html'
     success_url = reverse_lazy('lista_clientes')
 
-class borrar_cliente(DeleteView):
+class borrar_cliente(LoginRequiredMixin, DeleteView):
+    login_url ="/login/"
     model = Cliente
     template_name = 'conf_borrar_cliente.html'
     success_url = reverse_lazy('lista_clientes')
   
 #VISTAS DE COMPLEJO
-class lista_complejos(ListView):
+class lista_complejos(LoginRequiredMixin, ListView):
+    login_url = "/login/"
     model = Complejo
     template_name = 'lista_complejos.html'
     context_object_name = 'complejos'
@@ -196,29 +210,33 @@ class lista_complejos(ListView):
 
         return complejos
 
-class nuevo_complejo(CreateView):
+class nuevo_complejo(LoginRequiredMixin, CreateView):
+    login_url = "/login/"
     model = Complejo
     form_class = formComplejo
     template_name = 'form_complejo.html'
     success_url = reverse_lazy('lista_complejos')
 
-class modif_complejo(UpdateView):
+class modif_complejo(LoginRequiredMixin, UpdateView):
+    login_url = "/login/"
     model = Complejo
     form_class = formComplejo
     template_name = 'form_complejo.html'
     success_url = reverse_lazy('lista_complejos')
 
-class borrar_complejo(DeleteView):
+class borrar_complejo(LoginRequiredMixin, DeleteView):
+    login_url = "/login/"
     model = Complejo
     template_name = 'conf_borrar_complejo.html'
     success_url = reverse_lazy('lista_complejos')
     
 #VISTAS DE SERVICIOS
-class lista_servicios(ListView):
+class lista_servicios(LoginRequiredMixin, ListView):
+    login_url = "/login/"
     model = Servicio
     template_name = 'lista_servicios.html'
     context_object_name = 'servicios'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -228,29 +246,33 @@ class lista_servicios(ListView):
         return servicios
 
 
-class nuevo_servicio(CreateView):
+class nuevo_servicio(LoginRequiredMixin, CreateView):
+    login_url = "/login/"
     model = Servicio
     form_class = formServicio
     template_name = 'form_servicio.html'
     success_url = reverse_lazy('lista_servicios')
 
-class modif_servicio(UpdateView):
+class modif_servicio(LoginRequiredMixin, UpdateView):
+    login_url = "/login/"
     model = Servicio
     form_class = formServicio
     template_name = 'form_servicio.html'
     success_url = reverse_lazy('lista_servicios')
 
-class borrar_servicio(DeleteView):
+class borrar_servicio(LoginRequiredMixin, DeleteView):
+    login_url = "/login/"
     model = Servicio
     template_name = 'conf_borrar_servicio.html'
     success_url = reverse_lazy('lista_servicios')
     
 #VISTAS DE RESERVAS
-class lista_reservas(ListView):
+class lista_reservas(LoginRequiredMixin, ListView):
+    login_url  = "/login/"
     model = Reserva
     template_name = 'lista_reservas.html'
     context_object_name = 'reservas'
-    paginate_by = 2
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -260,7 +282,8 @@ class lista_reservas(ListView):
         )
 
         return reservas
-class nuevo_reserva(CreateView):
+class nuevo_reserva(LoginRequiredMixin, CreateView):
+    login_url = "/login/"
     model = Reserva
     form_class = formReserva
     template_name = 'form_reserva.html'
@@ -308,7 +331,8 @@ class nuevo_reserva(CreateView):
         
     
 
-class modif_reserva(UpdateView):
+class modif_reserva(LoginRequiredMixin, UpdateView):
+    login_url = "/login/"
     model = Reserva
     form_class = formReserva
     template_name = 'form_reserva.html'
@@ -363,13 +387,15 @@ class modif_reserva(UpdateView):
 
         return context
 
-class borrar_reserva(DeleteView):
+class borrar_reserva(LoginRequiredMixin, DeleteView):
+    login_url = "/login/"
     model = Reserva
     template_name = 'conf_borrar_reserva.html'
     success_url = reverse_lazy('lista_reservas')
 
 
-class DetalleReservaServicio(ListView):
+class DetalleReservaServicio(LoginRequiredMixin, ListView):
+    login_url = "/login/"
     model = ReservaServicio
     template_name = 'servicios-reserva.html'
     context_object_name = 'reservaservicio'

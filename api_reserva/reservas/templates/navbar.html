@@ -48,8 +48,12 @@
                 </span>
                 
                 <div>
-                    <h4 class="user">{{request.user.username}}</h4>
+                    {% if request.user.is_authenticated %}
+                    <h4 class="user">{{ request.user.username }}</h4>
                     <a href="/logout/">Logout</a>
+                    {% else %}
+                    <a href="/login/">Login</a>
+                    {% endif %}
                 </div>
         
             </div>

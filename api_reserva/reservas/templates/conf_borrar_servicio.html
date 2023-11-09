@@ -2,17 +2,21 @@
 {% load static %} 
 {% block content %}
 
-<div class="confBorrar">
-    <h1>Borrar Servicio</h1>
+<div class="contenedorConf">
 
-    <p>¿Esta seguro de borrar el servicio <b>{{ servicio.codigo}}</b>?</p>
-    <form method="post">
-        {% csrf_token %}
-        <div class="contenedorBotones">
-            <button type="submit" class="botonSecundario">Aceptar</button>
-            <a type="submit" class="botonSecundario" href="/servicios/">Cancelar</a>
-        </div>
-    </form>
+    <div class="confBorrar">
+        <h1>Borrar Servicio</h1>
+
+        <p>¿Esta seguro de borrar el servicio <b>{{ servicio.codigo}}</b>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="contenedorBotones">
+                <button type="submit" class="botonSecundario">Aceptar</button>
+                <a type="submit" class="botonSecundario" href="/servicios/">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
 </div>
 
 {% endblock %} 

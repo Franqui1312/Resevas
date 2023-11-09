@@ -242,6 +242,7 @@ table a:hover{
 
 .col.display-4.my-3{
     color: var(--color-dark);
+    font-family: 'poppins', sans-serif;
 }
 
 /* formularios */
@@ -297,12 +298,19 @@ h3{
     width: 80%;
     height: 65vh;
     margin: auto;
-    margin-top: 2rem;
-    background-color: var(--color-background);
+
+    background-color: var(--color-white);
     border-radius: 2.5rem;
     box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
     font-family: 'poppins', sans-serif;
     transition: ease 0.5s;
+    top: 5rem;
+    position: relative;
+}
+
+.contenedorConf{
+    background-color: var(--color-background);
+    height: 100vh;
 }
 
 .confBorrar:hover{
@@ -311,9 +319,10 @@ h3{
 
 .confBorrar h1{
     text-align: center;
-    margin-top: 2rem;
+
     font-size: 3rem;
     padding-top: 2rem;
+    color: var(--color-dark);
 }
 
 .confBorrar p{
@@ -340,6 +349,7 @@ h3{
 
 .totales h3{
     padding-top: 1rem;
+    color: var(--color-primary);
 }
 
 .totales div{
@@ -365,14 +375,19 @@ h3{
 .login-card{
     width: 60%;
     height: 65vh;
+    position: relative;
     top: 5rem;
     margin: auto;
-    margin-top: 15vh;
     background-color: var(--color-white);
     border-radius: 2.5rem;
     box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
     transition: ease 0.5s;
     font-family: 'poppins', sans-serif;
+}
+
+.contenedorLogin{
+    background-color: var(--color-background);
+    height: 100vh;
 }
 
 .login-card input{
@@ -461,6 +476,10 @@ h3{
     margin-top: .5rem;
 }
 
+#botonDarkMode :hover{
+    box-shadow: 1rem 1rem 1rem #9381ff;
+}
+
 body.dark-mode-variables #results {
     background-color: var(--color-background); /* Fondo oscuro para la tabla */
     color: #fff; /* Texto blanco en el modo oscuro */
@@ -489,11 +508,13 @@ body.dark-mode-variables #results th, body.dark-mode-variables #results td {
   ::-webkit-scrollbar-thumb {
     background: var(--color-primary); /* Color del pulgar */
     border-radius: 6px; /* Radio de borde del pulgar */
+    transition: ease .5s;
   }
   
   /* Estilo para el pulgar (la parte arrastrable) de la barra de desplazamiento cuando se pasa el ratón por encima */
   ::-webkit-scrollbar-thumb:hover {
     background: var(--color-background); /* Cambiar color del pulgar en el hover */
+    transition: ease .5s;
   }
   
 

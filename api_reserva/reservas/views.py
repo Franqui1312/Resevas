@@ -418,13 +418,14 @@ def reservaCSV(request, reserva_id):
 
     return response
 '''
-
+from reportlab.pdfbase import pdfmetrics
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import A4
 from django.shortcuts import get_object_or_404
+from reportlab.pdfbase.ttfonts import TTFont
 
 def factura(request, reserva_id):
     # Obtener la reserva específica o devolver un error 404 si no existe
@@ -433,8 +434,13 @@ def factura(request, reserva_id):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=A4, bottomup=0)
 
+    #carga de la fuente poppins
+    pdfmetrics.registerFont(TTFont('Poppins', 'reservas/static/fonts/Poppins-Regular.ttf'))
+
+    print(pdfmetrics.getRegisteredFontNames())
+
     # Configurar el estilo del PDF
-    c.setFont("Helvetica", 12)
+    c.setFont("Poppins", 12)
     line_height = 14
     left_margin = inch
     top_margin = inch * 10
@@ -470,7 +476,8 @@ def factura(request, reserva_id):
     top_margin -= line_height * 2
 
     # Total
-    c.drawString(left_margin, top_margin, "Total: $XXXX")  # Puedes calcular el total según tus necesidades
+    total = reserva.total()
+    c.drawString(left_margin, top_margin, f"Total: {total}")  # Puedes calcular el total según tus necesidades
 
     # Guardar y enviar el PDF
     c.showPage()

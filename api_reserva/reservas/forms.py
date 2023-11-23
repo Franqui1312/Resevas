@@ -70,13 +70,18 @@ class formReservaServicio(forms.ModelForm):
         }
 
 class formReserva(forms.ModelForm):
+
+    cliente_apellido_nombre = forms.CharField(
+        required=False,
+        label='Cliente',
+        widget=forms.TextInput(attrs={'class': 'form-control autocomplete', 'placeholder': 'Ingrese el nombre del cliente'}),
+    )
     class Meta:
         model = Reserva
-        fields = ('cliente', 'complejo', 'cabania', 'diaEntrada', 'diaSalida','seña')
+        fields = ('complejo', 'cabania', 'diaEntrada', 'diaSalida','seña')
         widgets = {
-            'cliente': forms.Select(attrs={'class': 'form-select'}),
-            'complejo': forms.Select(attrs={'class': 'form-select'}),
-            'cabania': forms.Select(attrs={'class': 'form-select'}),
+            'complejo': forms.Select(attrs={'class': 'form-select', 'id': 'complejo-select'}),
+            'cabania': forms.Select(attrs={'class': 'form-select', 'id': 'cabania-select'}),
             'diaEntrada': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'diaSalida': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'seña': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la Seña'}),

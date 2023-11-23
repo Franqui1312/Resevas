@@ -46,4 +46,6 @@ urlpatterns = [
     path('logout/', views.Logout, name='logout'),
 
     path('reservas/reservas/<int:reserva_id>/factura/', views.factura, name='factura'),
+
+    path('search_clients/', views.search_clients, name='search_clients'),
 ]

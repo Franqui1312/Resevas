@@ -8,9 +8,9 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import date
 from django.contrib.auth import logout
-import csv
 from django.http import HttpResponse
 
 # Create your views here.
@@ -70,9 +70,42 @@ def detalle_cabania(request, cabania_id):
 def detalle_reserva(request, reserva_id):
     reserva = Reserva.objects.get(id=reserva_id)
 
+
+    cabania = reserva.cabania.precio
+
+    entrada = reserva.diaEntrada #dia entrada
+    salida = reserva.diaSalida  #dia salida
+
+    cantidad_dias = (salida - entrada).days #calculo de la diferencia entre dia de entrada y salida
+
+    total_cabania = cabania * cantidad_dias #calculo entre el precio de la cabaña y la cantidad de dias
+
+    total_servicios = 0 #calculo sobre el total de servicios
+
+
+    total_servicios = 0
+    reserva_servicios = ReservaServicio.objects.filter(reserva=reserva)
+
+    # Iterar sobre cada formulario en el formset
+    for reserva_servicio in reserva_servicios:
+        servicio = reserva_servicio.servicio
+        total_servicios += servicio.precio
+        
+
+        total_reserva = total_cabania + total_servicios #calculo sobre el total de la reserva
+        print(total_servicios)
+
     context = {
-        'reserva': reserva
-    }
+            'reserva': reserva,
+            'cabania': cabania,
+            'cantidad_dias': cantidad_dias,
+            'total_cabania': total_cabania,
+            'total_servicios': total_servicios,
+            'total_reserva': total_reserva,
+            'total_servicios': total_servicios
+        }
+
+
     return render(request, 'detalle_reserva.html', context)
 
 def detalle_servicio(request, servicio_id):
@@ -85,7 +118,8 @@ def detalle_servicio(request, servicio_id):
 
 #VISTAS ENCARGADO
 
-class lista_encargados(ListView):
+class lista_encargados(LoginRequiredMixin, ListView):
+    login_url = '/login/'
     model = Encargado
     template_name = 'lista_encargados.html'
     context_object_name = 'encargados'
@@ -99,26 +133,30 @@ class lista_encargados(ListView):
         )
         return encargados
 
-class nuevo_encargado(CreateView):
+class nuevo_encargado(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
     model = Encargado
     form_class = formEncargado
     template_name = 'form_encargado.html'
     success_url = reverse_lazy('lista_encargados')
 
-class modif_encargado(UpdateView):
+class modif_encargado(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
     model = Encargado
     form_class = formEncargado
     template_name = 'form_encargado.html'
     success_url = reverse_lazy('lista_encargados')
 
-class borrar_encargado(DeleteView):
+class borrar_encargado(LoginRequiredMixin,DeleteView):
+    login_url = '/login/'
     model = Encargado
     template_name = 'conf_borrar_encargado.html'
     success_url = reverse_lazy('lista_encargados')
 
 #VISTAS DE CABAÑAS
 
-class lista_cabanias(ListView):
+class lista_cabanias(LoginRequiredMixin, ListView):
+    login_url = '/login/'
     model = Cabania
     template_name = 'lista_cabanias.html'
     context_object_name = 'cabanias'
@@ -133,30 +171,34 @@ class lista_cabanias(ListView):
 
         return cabanias
 
-class nuevo_cabania(CreateView):
+class nuevo_cabania(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
     model = Cabania
     form_class = formCabania
     template_name = 'form_cabania.html'
     success_url = reverse_lazy('lista_cabanias')
 
-class modif_cabania(UpdateView):
+class modif_cabania(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
     model = Cabania
     form_class = formCabania
     template_name = 'form_cabania.html'
     success_url = reverse_lazy('lista_cabanias')
 
-class borrar_cabania(DeleteView):
+class borrar_cabania(LoginRequiredMixin, DeleteView):
+    login_url = '/login/'
     model = Cabania
     template_name = 'conf_borrar_cabania.html'
     success_url = reverse_lazy('lista_cabanias')
   
 #VISTAS DE CLIENTES
 
-class lista_clientes(ListView):
+class lista_clientes(LoginRequiredMixin, ListView):
+    login_url = '/login/'
     model = Cliente
     template_name = 'lista_clientes.html'
     context_object_name = 'clientes'
-    paginate_by = 2
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -168,25 +210,29 @@ class lista_clientes(ListView):
 
         return  clientes
 
-class nuevo_cliente(CreateView):
+class nuevo_cliente(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
     model = Cliente
     form_class = formCliente
     template_name = 'form_cliente.html'
     success_url = reverse_lazy('lista_clientes')
 
-class modif_cliente(UpdateView):
+class modif_cliente(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
     model = Cliente
     form_class = formCliente
     template_name = 'form_complejo.html'
     success_url = reverse_lazy('lista_clientes')
 
-class borrar_cliente(DeleteView):
+class borrar_cliente(LoginRequiredMixin, DeleteView):
+    login_url = '/login/'
     model = Cliente
     template_name = 'conf_borrar_cliente.html'
     success_url = reverse_lazy('lista_clientes')
   
 #VISTAS DE COMPLEJO
-class lista_complejos(ListView):
+class lista_complejos(LoginRequiredMixin, ListView):
+    login_url = '/login/'
     model = Complejo
     template_name = 'lista_complejos.html'
     context_object_name = 'complejos'
@@ -200,29 +246,33 @@ class lista_complejos(ListView):
 
         return complejos
 
-class nuevo_complejo(CreateView):
+class nuevo_complejo(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
     model = Complejo
     form_class = formComplejo
     template_name = 'form_complejo.html'
     success_url = reverse_lazy('lista_complejos')
 
-class modif_complejo(UpdateView):
+class modif_complejo(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
     model = Complejo
     form_class = formComplejo
     template_name = 'form_complejo.html'
     success_url = reverse_lazy('lista_complejos')
 
-class borrar_complejo(DeleteView):
+class borrar_complejo(LoginRequiredMixin, DeleteView):
+    login_url = '/login/'
     model = Complejo
     template_name = 'conf_borrar_complejo.html'
     success_url = reverse_lazy('lista_complejos')
     
 #VISTAS DE SERVICIOS
-class lista_servicios(ListView):
+class lista_servicios(LoginRequiredMixin, ListView):
+    login_url = '/login/'
     model = Servicio
     template_name = 'lista_servicios.html'
     context_object_name = 'servicios'
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -232,29 +282,33 @@ class lista_servicios(ListView):
         return servicios
 
 
-class nuevo_servicio(CreateView):
+class nuevo_servicio(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
     model = Servicio
     form_class = formServicio
     template_name = 'form_servicio.html'
     success_url = reverse_lazy('lista_servicios')
 
-class modif_servicio(UpdateView):
+class modif_servicio(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
     model = Servicio
     form_class = formServicio
     template_name = 'form_servicio.html'
     success_url = reverse_lazy('lista_servicios')
 
-class borrar_servicio(DeleteView):
+class borrar_servicio(LoginRequiredMixin, DeleteView):
+    login_url = '/login/'
     model = Servicio
     template_name = 'conf_borrar_servicio.html'
     success_url = reverse_lazy('lista_servicios')
     
 #VISTAS DE RESERVAS
-class lista_reservas(ListView):
+class lista_reservas(LoginRequiredMixin, ListView):
+    login_url = '/login/'
     model = Reserva
     template_name = 'lista_reservas.html'
     context_object_name = 'reservas'
-    paginate_by = 2
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -264,7 +318,15 @@ class lista_reservas(ListView):
         )
 
         return reservas
-class nuevo_reserva(CreateView):
+    
+def obtener_id_cliente(apellido_nombre):
+    try:
+        cliente = Cliente.objects.get(apellido_nombre=apellido_nombre)
+        return cliente.id
+    except Cliente.DoesNotExist:
+        return None
+class nuevo_reserva(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
     model = Reserva
     form_class = formReserva
     template_name = 'form_reserva.html'
@@ -279,18 +341,34 @@ class nuevo_reserva(CreateView):
 
         return context
 
+        
+    def total_servicios(self):
+        total_servicios = 0
+        formset = formReserva.ReservaServicioFormset(data=self.request.POST)
+        if formset.is_valid():
+            for form in formset:
+                servicio_id = form.cleaned_data.get('servicio')
+                if servicio_id:
+                    servicio = Servicio.objects.get(id=servicio_id)
+                    total_servicios += servicio.precio
+        return total_servicios
     
     def form_valid(self, form):
-        context = self.get_context_data()
-        formset = context['formset']
-        if formset.is_valid() and form.is_valid():
-            self.object = form.save()
-            formset.instance = self.object
-            formset.save()
+        cliente_apellido_nombre = form.cleaned_data.get('cliente_apellido_nombre')
+        cliente = Cliente.objects.filter(apellido_nombre=cliente_apellido_nombre).first()
+    
+        if cliente:
+            reserva = form.save(commit=False)
+            reserva.cliente = cliente
+            reserva.save()
+
+            total_servicios = self.total_servicios()
+
             return super().form_valid(form)
         else:
-            return self.render_to_response(self.get_context_data(form=form))
-        
+            form.add_error('cliente_apellido_nombre', 'Cliente no encontrado')
+            return self.form_invalid(form)
+
     def total(self):
         reserva = Reserva.objects.get(pk=id)
         cabania = reserva.cabania.precio
@@ -301,22 +379,41 @@ class nuevo_reserva(CreateView):
 
         total_cabania = cabania * 2
 
+        total_servicios = 0
+
+        formset = formReserva.ReservaServicioFormset(data=self.request.POST)
+
+                # Iterar sobre cada formulario en el formset
+        for servicio_form in formset.forms:
+            servicio_id = servicio_form.cleaned_data.get('servicio')
+            
+            # Verificar si se seleccionó un servicio
+            if servicio_id:
+                servicio = Servicio.objects.get(id=servicio_id)
+                total_servicios += servicio.precio
+
         context = {
             'reserva': reserva,
             'cabania': cabania,
             'cantidad_dias': cantidad_dias,
-            'total_cabania': total_cabania
+            'total_cabania': total_cabania,
+            'total_servicios': total_servicios
         }
 
         return context
         
-    
-
-class modif_reserva(UpdateView):
+class modif_reserva(LoginRequiredMixin, UpdateView):
     model = Reserva
     form_class = formReserva
     template_name = 'form_reserva.html'
     success_url = reverse_lazy('lista_reservas')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        reserva = self.get_object()
+        if reserva.cliente:
+            initial['cliente_apellido_nombre'] = reserva.cliente.apellido_nombre
+        return initial
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -335,11 +432,21 @@ class modif_reserva(UpdateView):
         context = self.get_context_data()
         formset = context['formset']
 
+        cliente_apellido_nombre = form.cleaned_data.get('cliente_apellido_nombre')
+        cliente = Cliente.objects.filter(apellido_nombre=cliente_apellido_nombre).first()
+
         if formset.is_valid() and form.is_valid():
             formset.save()
+
+            reserva = form.save(commit=False)
+            reserva.cliente = cliente
+            reserva.save()
             return super().form_valid(form)
         else:
-            return self.render_to_response(self.get_context_data(form=form))
+            form.add_error('cliente_apellido_nombre', 'Cliente no encontrado')
+            return self.form_invalid(form)
+
+
         
     def total(self):
         reserva = self.object
@@ -354,7 +461,22 @@ class modif_reserva(UpdateView):
 
         total_servicios = 0 #calculo sobre el total de servicios
 
+
+        total_servicios = 0
+        reserva_servicios = ReservaServicio.objects.filter(reserva=reserva)
+
+                # Iterar sobre cada formulario en el formset
+        for reserva_servicio in reserva_servicios:
+            servicio = reserva_servicio.servicio
+            total_servicios += servicio.precio
+        
+
         total_reserva = total_cabania + total_servicios #calculo sobre el total de la reserva
+        print(total_servicios)
+
+        total_servicios_reserva = total_servicios * cantidad_dias 
+
+        total_reserva = total_cabania + total_servicios_reserva #calculo sobre el total de la reserva
 
         context = {
             'reserva': reserva,
@@ -363,17 +485,19 @@ class modif_reserva(UpdateView):
             'total_cabania': total_cabania,
             'total_servicios': total_servicios,
             'total_reserva': total_reserva,
+            'total_servicios': total_servicios,
+            'total_servicios_reserva': total_servicios_reserva
         }
 
         return context
 
-class borrar_reserva(DeleteView):
+class borrar_reserva(LoginRequiredMixin, DeleteView):
     model = Reserva
     template_name = 'conf_borrar_reserva.html'
     success_url = reverse_lazy('lista_reservas')
 
 
-class DetalleReservaServicio(ListView):
+class DetalleReservaServicio(LoginRequiredMixin, ListView):
     model = ReservaServicio
     template_name = 'servicios-reserva.html'
     context_object_name = 'reservaservicio'
@@ -389,34 +513,6 @@ def Logout(request):
     logout(request)
     return redirect('/')
 
-#csv 
-
-'''
-from django.shortcuts import get_object_or_404
-import io
-
-def reservaCSV(request, reserva_id):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=reserva.csv'
-    writer = csv.writer(response)
-
-    # Obtener la reserva específica o devolver un error 404 si no existe
-    reserva = get_object_or_404(Reserva, id=reserva_id)
-
-    # Escribir encabezados
-    writer.writerow(['cliente', 'complejo', 'cabania', 'diaEntrada', 'diaSalida', 'seña'])
-
-    # Escribir los datos de la reserva específica
-    writer.writerow([
-        str(reserva.cliente),
-        str(reserva.complejo),
-        str(reserva.cabania),
-        str(reserva.diaEntrada),
-        str(reserva.diaSalida),
-        str(reserva.seña),
-    ])
-
-    return response
 '''
 from reportlab.pdfbase import pdfmetrics
 from django.http import FileResponse
@@ -427,29 +523,30 @@ from reportlab.lib.pagesizes import A4
 from django.shortcuts import get_object_or_404
 from reportlab.pdfbase.ttfonts import TTFont
 
+def draw_header(c):
+    # Aquí puedes dibujar el contenido del encabezado
+    c.setFont("Poppins", 16)
+    c.drawString(inch, 10 * inch, "Nombre de tu Empresa")
+    # Otros elementos del encabezado...
+
 def factura(request, reserva_id):
-    # Obtener la reserva específica o devolver un error 404 si no existe
     reserva = get_object_or_404(Reserva, id=reserva_id)
 
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=A4, bottomup=0)
 
-    #carga de la fuente poppins
     pdfmetrics.registerFont(TTFont('Poppins', 'reservas/static/fonts/Poppins-Regular.ttf'))
 
-    print(pdfmetrics.getRegisteredFontNames())
-
-    # Configurar el estilo del PDF
     c.setFont("Poppins", 12)
     line_height = 14
     left_margin = inch
     top_margin = inch * 10
 
-    # Encabezado
+    draw_header(c)
+
     c.drawString(left_margin, top_margin, "Factura")
     top_margin -= line_height * 2
 
-    # Información de la reserva
     c.drawString(left_margin, top_margin, f"Cliente: {reserva.cliente}")
     top_margin -= line_height
     c.drawString(left_margin, top_margin, f"Complejo: {reserva.complejo}")
@@ -457,33 +554,147 @@ def factura(request, reserva_id):
     c.drawString(left_margin, top_margin, f"Cabaña: {reserva.cabania}")
     top_margin -= line_height * 2
 
-    # Detalles
     c.drawString(left_margin, top_margin, "Detalles:")
     top_margin -= line_height
 
+    cabania = reserva.cabania.precio
+    entrada = reserva.diaEntrada
+    salida = reserva.diaSalida
+    cantidad_dias = (salida - entrada).days
+    total_cabania = cabania * cantidad_dias
+    total_servicios = 0
+    reserva_servicios = ReservaServicio.objects.filter(reserva=reserva)
+
+    # Iterar sobre cada formulario en el formset
+    for reserva_servicio in reserva_servicios:
+        servicio = reserva_servicio.servicio
+        total_servicios += servicio.precio
+        
+
+        total_reserva = total_cabania + total_servicios #calculo sobre el total de la reserva
+
+    total_servicios_reserva = total_servicios * cantidad_dias
+    total_reserva = total_cabania + total_servicios_reserva
+    
     detalles = [
         f"Día de Entrada: {reserva.diaEntrada}",
         f"Día de Salida: {reserva.diaSalida}",
         f"Seña: {reserva.seña}",
+        f"total servicios de la reserva: {total_servicios_reserva}",
+        f"total servicios por dia: {total_servicios} ",
+        f"total reserva: {total_reserva}"
     ]
 
     for detalle in detalles:
         c.drawString(left_margin, top_margin, detalle)
         top_margin -= line_height
 
-    # Línea divisoria
     c.line(left_margin, top_margin, inch + 500, top_margin)
     top_margin -= line_height * 2
 
-    # Total
-    total = reserva.total()
-    c.drawString(left_margin, top_margin, f"Total: {total}")  # Puedes calcular el total según tus necesidades
 
-    # Guardar y enviar el PDF
+    c.drawString(left_margin, top_margin, f"Total: {total_reserva}")
+
     c.showPage()
     c.save()
     buf.seek(0)
 
     return FileResponse(buf, as_attachment=True, filename=f'reserva{reserva_id}_factura.pdf')
+'''
+
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+from django.shortcuts import get_object_or_404
+import io
+from django.http import FileResponse
+
+def factura(request, reserva_id):
+    reserva = get_object_or_404(Reserva, id=reserva_id)
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter)
+
+    # Registro de la fuente
+    pdfmetrics.registerFont(TTFont('Poppins', 'reservas/static/fonts/Poppins-Regular.ttf'))
+
+    # Configuración de la fuente y márgenes
+    c.setFont("Poppins", 12)
+    line_height = 14
+    left_margin = inch
+    top_margin = inch * 10
+
+    # Encabezado
+    palabra = "ReserVas"
+    mitad1 = palabra[:len(palabra)-3]
+    mitad2 = palabra[len(palabra)-3:]
+
+    c.setFillColorRGB(0,0,0)  # Color negro para la primera mitad
+    c.drawString(250, 750, mitad1)
+
+    c.setFillColorRGB(147, 128, 255)  # Color azul para la segunda mitad
+    c.drawString(283, 750, mitad2)
+
+    # Datos del complejo y cabaña
+    c.setFillColorRGB(0, 0, 0)
+    complejo_cabania = f"Complejo: {reserva.complejo}   Cabaña: {reserva.cabania}"
+    c.drawString(left_margin, 700, complejo_cabania)
+
+    # Detalles de la reserva
+    detalles = [
+        f"Cliente: {reserva.cliente}",
+        f"Día de Entrada: {reserva.diaEntrada}",
+        f"Día de Salida: {reserva.diaSalida}",
+        f"Seña: {reserva.seña}"
+    ]
+
+    # Posición inicial para los detalles de la reserva
+    top_margin -= 100
+
+    # Dibujar detalles de la reserva
+    for detalle in detalles:
+        c.drawString(left_margin, top_margin, detalle)
+        top_margin -= line_height
+
+    # Cálculos de precios y total de reserva
+    cabania = reserva.cabania.precio
+    entrada = reserva.diaEntrada
+    salida = reserva.diaSalida
+    cantidad_dias = (salida - entrada).days
+    total_cabania = cabania * cantidad_dias
+
+    total_servicios = 0
+    reserva_servicios = ReservaServicio.objects.filter(reserva=reserva)
+
+    for reserva_servicio in reserva_servicios:
+        servicio = reserva_servicio.servicio
+        total_servicios += servicio.precio
+
+    total_servicios_reserva = total_servicios * cantidad_dias
+    total_reserva = total_cabania + total_servicios_reserva
+
+    # Mostrar totales
+    c.drawString(left_margin, top_margin - 30, f"total de los servicios por dia: {total_servicios}")
+    c.drawString(left_margin, top_margin - 50, f"Total servicios de la reserva: {total_servicios_reserva}")
+    c.drawString(left_margin, top_margin - 70, f"Total reserva: {total_reserva}")
+
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    return FileResponse(buf, as_attachment=True, filename=f'reserva{reserva_id}_factura.pdf')
+
+
+from django.http import JsonResponse
+
+def search_clients(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        q = request.GET.get('term', '')
+        clients = Cliente.objects.filter(apellido_nombre__icontains=q)
+        results = [client.apellido_nombre for client in clients]
+        return JsonResponse(results, safe=False)
+
 
 

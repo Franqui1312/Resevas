@@ -3,13 +3,13 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render, HttpResponseRedirect, reverse, redirect
 from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio, ReservaServicio
 from .forms import formCabania, formEncargado, formCliente, formComplejo, formServicio, formReserva
-from django.views.generic import  CreateView, UpdateView, DeleteView, ListView
+from django.views.generic import  CreateView, UpdateView, DeleteView, ListView, View
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from datetime import date
+from datetime import date, timedelta
 from django.contrib.auth import logout
 from django.http import HttpResponse
 
@@ -325,6 +325,8 @@ def obtener_id_cliente(apellido_nombre):
         return cliente.id
     except Cliente.DoesNotExist:
         return None
+    
+
 class nuevo_reserva(LoginRequiredMixin, CreateView):
     login_url = '/login/'
     model = Reserva
@@ -402,6 +404,8 @@ class nuevo_reserva(LoginRequiredMixin, CreateView):
 
         return context
         
+
+
 class modif_reserva(LoginRequiredMixin, UpdateView):
     model = Reserva
     form_class = formReserva
@@ -512,6 +516,60 @@ class DetalleReservaServicio(LoginRequiredMixin, ListView):
 def Logout(request):
     logout(request)
     return redirect('/')
+
+
+class Hospedaje(View):
+    template_name = 'hospedaje.html'
+
+    def get(self, request, *args, **kwargs):
+        # Obtén todas las cabañas
+        cabañas = Cabania.objects.all()
+
+        # Verifica la disponibilidad de cada cabaña
+        disponibilidad_cabañas = []
+        today = date.today()
+        for cabaña in cabañas:
+            # Obtén todas las reservas para la cabaña
+            reservas_cabaña = Reserva.objects.filter(cabania=cabaña)
+
+            # Verifica si la cabaña está ocupada en alguna de las reservas existentes
+            ocupada = any(
+                reserva.diaEntrada <= today <= reserva.diaSalida or
+                reserva.diaEntrada <= today <= reserva.diaSalida
+                for reserva in reservas_cabaña
+            )
+
+            # Obtiene las fechas de ocupación y el cliente asociado a la última reserva
+            fechas_ocupacion = [
+                {'diaEntrada': reserva.diaEntrada, 'diaSalida': reserva.diaSalida, 'cliente': reserva.cliente}
+                for reserva in reservas_cabaña
+            ]
+
+            # Calcula las fechas de disponibilidad
+            fechas_libres = [fecha['diaSalida'] for fecha in fechas_ocupacion if fecha['diaSalida'] > today]
+            if fechas_libres:
+                ultima_fecha_salida = min(fechas_libres)
+            else:
+                ultima_fecha_salida = None
+
+            fechas_proximas = [fecha['diaEntrada'] for fecha in fechas_ocupacion if fecha['diaEntrada'] > today]
+            if fechas_proximas:
+                ultima_fecha_entrada = min(fechas_proximas)
+            else:
+                ultima_fecha_entrada = None
+
+            # Agrega la cabaña, su disponibilidad y las fechas de ocupación a la lista
+            disponibilidad_cabañas.append({
+                'cabaña': cabaña,
+                'disponible': not ocupada,
+                'fechas_ocupacion': fechas_ocupacion,
+                'disponible_desde': ultima_fecha_salida,
+                'disponible_hasta': ultima_fecha_entrada
+            })
+
+        # Pasa la lista de disponibilidad al contexto del template
+        context = {'disponibilidad_cabañas': disponibilidad_cabañas}
+        return render(request, self.template_name, context)
 
 '''
 from reportlab.pdfbase import pdfmetrics

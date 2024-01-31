@@ -5,10 +5,13 @@
     <div class="detalle">
         <h1>Cabaña</h1>
         <h2>{{ cabania.nombre }}</h2>
+        <p><strong>Complejo: </strong>{{ cabania.complejo }}</p>
         <p><strong>Tipo: </strong>{{ cabania.tipo }}</p>
         <p><strong>Capacidad: </strong>{{ cabania.capacidad }}</p>
         <p><strong>Precio: </strong>{{ cabania.precio }}</p>
-        <p><strong>Complejo: </strong>{{ cabania.complejo }}</p>
+        <p><strong>Precio por Persona: </strong>{{ cabania.precio_pers }}</p>
+        <p><strong>Servicios incluidos: </strong>{{ cabania.servicio_incluido }}</p>
+        
     </div>
 </div>
 {% endblock %}

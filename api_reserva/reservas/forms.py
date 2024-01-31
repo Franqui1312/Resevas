@@ -5,12 +5,14 @@ from .models import Cabania, Encargado, Cliente, Complejo, Reserva, Servicio, Re
 class formCabania(forms.ModelForm):
     class Meta:
         model = Cabania
-        fields = ('nombre', 'tipo', 'capacidad', 'precio', 'complejo')
+        fields = ('nombre', 'tipo', 'capacidad', 'servicio_incluido', 'precio', 'precio_pers', 'complejo')
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-            'tipo': forms.Select(attrs={'class': 'form-select'}),
-            'capacidad': forms.NumberInput(attrs={'class': 'form-control'}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Nombre de la Cabaña'}),
+            'tipo': forms.Select(attrs={'class': 'form-select', 'placeholder': 'Ingrese el tipo de Cabaña'}),
+            'capacidad': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la capacidad de personas'}),
+            'servicio_incluido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese los servicios ya incluidos en la cabaña'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el precio base'}),
+            'precio_pers': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el precio por persona'}),
             'complejo': forms.Select(attrs={'class': 'form-select'}),
         }
 
@@ -71,21 +73,17 @@ class formReservaServicio(forms.ModelForm):
         }
 
 class formReserva(forms.ModelForm):
-
-    cliente_apellido_nombre = forms.CharField(
-        required=False,
-        label='Cliente',
-        widget=forms.TextInput(attrs={'class': 'form-control autocomplete', 'placeholder': 'Ingrese el nombre del cliente'}),
-    )
+    
     class Meta:
         model = Reserva
-        fields = ('complejo', 'cabania', 'diaEntrada', 'diaSalida','seña')
+        fields = ('cliente','complejo', 'cabania', 'cant_personas', 'diaEntrada', 'diaSalida','seña', 'servicio')
         widgets = {
+            
             'complejo': forms.Select(attrs={'class': 'form-select', 'id': 'complejo-select'}),
             'cabania': forms.Select(attrs={'class': 'form-select', 'id': 'cabania-select'}),
+            'cliente':forms.Select(attrs={'class': 'form-control', 'placeholder': 'Seleccione el cliente'}),
+            'cant_personas': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la cantidad de personas'}),
             'diaEntrada': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'diaSalida': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
             'seña': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la Seña'}),
-        }
-
-    ReservaServicioFormset = forms.inlineformset_factory(Reserva, ReservaServicio, form=formReservaServicio, extra=1)
+            'servicio': forms.Select(attrs={'class': 'form-select', 'placeholder': 'Seleccione tipo de servicio'}),}

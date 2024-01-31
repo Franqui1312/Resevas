@@ -1,6 +1,6 @@
 from typing import Any
-from django.db.models.query import QuerySet
-from django.shortcuts import render, HttpResponseRedirect, reverse, redirect
+from django.http import JsonResponse
+from django.shortcuts import render, reverse, redirect
 from .models import Reserva, Cliente, Encargado, Complejo, Cabania, Servicio, ReservaServicio
 from .forms import formCabania, formEncargado, formCliente, formComplejo, formServicio, formReserva
 from django.views.generic import  CreateView, UpdateView, DeleteView, ListView, View
@@ -70,20 +70,20 @@ def detalle_cabania(request, cabania_id):
 def detalle_reserva(request, reserva_id):
     reserva = Reserva.objects.get(id=reserva_id)
 
-
+    precio= reserva.cabania.precio_pers
     cabania = reserva.cabania.precio
-
+    personas= reserva.cant_personas
     entrada = reserva.diaEntrada #dia entrada
     salida = reserva.diaSalida  #dia salida
+    senia = reserva.seña  
+    servicio= reserva.servicio.precio
 
     cantidad_dias = (salida - entrada).days #calculo de la diferencia entre dia de entrada y salida
 
-    total_cabania = cabania * cantidad_dias #calculo entre el precio de la cabaña y la cantidad de dias
+    total_cabania = cabania + (precio*personas) * cantidad_dias - senia #calculo entre el precio de la cabaña y la cantidad de dias
 
-    total_servicios = 0 #calculo sobre el total de servicios
+    total_servicios = servicio * personas #calculo sobre el total de servicios
 
-
-    total_servicios = 0
     reserva_servicios = ReservaServicio.objects.filter(reserva=reserva)
 
     # Iterar sobre cada formulario en el formset
@@ -98,6 +98,7 @@ def detalle_reserva(request, reserva_id):
     context = {
             'reserva': reserva,
             'cabania': cabania,
+            'cantidad_personas': personas,
             'cantidad_dias': cantidad_dias,
             'total_cabania': total_cabania,
             'total_servicios': total_servicios,
@@ -334,37 +335,27 @@ class nuevo_reserva(LoginRequiredMixin, CreateView):
     template_name = 'form_reserva.html'
     success_url = reverse_lazy('lista_reservas')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['formset'] = formReserva.ReservaServicioFormset(self.request.POST)
-        else:
-            context['formset'] = formReserva.ReservaServicioFormset()
-
-        return context
-
-        
-    def total_servicios(self):
-        total_servicios = 0
-        formset = formReserva.ReservaServicioFormset(data=self.request.POST)
-        if formset.is_valid():
-            for form in formset:
-                servicio_id = form.cleaned_data.get('servicio')
-                if servicio_id:
-                    servicio = Servicio.objects.get(id=servicio_id)
-                    total_servicios += servicio.precio
+    def total_servicios(self, formset):
+        total_servicios = sum(
+            servicio.precio for servicio in formset.cleaned_data if servicio.get('servicio')
+        )
         return total_servicios
-    
+
     def form_valid(self, form):
         cliente_apellido_nombre = form.cleaned_data.get('cliente_apellido_nombre')
         cliente = Cliente.objects.filter(apellido_nombre=cliente_apellido_nombre).first()
-    
+       
+
         if cliente:
             reserva = form.save(commit=False)
             reserva.cliente = cliente
             reserva.save()
 
-            total_servicios = self.total_servicios()
+            total_servicios = self.total_servicios(formReserva.ReservaServicioFormset(self.request.POST))
+            # Puedes guardar el total_servicios en la instancia de reserva si es necesario
+
+            # Aquí accede directamente al formset desde self.request.POST
+            total_servicios = self.total_servicios(formReserva.ReservaServicioFormset(self.request.POST))
 
             return super().form_valid(form)
         else:
@@ -372,39 +363,33 @@ class nuevo_reserva(LoginRequiredMixin, CreateView):
             return self.form_invalid(form)
 
     def total(self):
-        reserva = Reserva.objects.get(pk=id)
-        cabania = reserva.cabania.precio
-        entrada = reserva.diaEntrada
-        salida = reserva.diaSalida
+        # Asegúrate de que la reserva se ha guardado antes de intentar acceder a sus atributos
+        if self.object:
+            reserva = self.object
+            precio = reserva.cabania.precio_pers
+            personas= reserva.cant_personas
+            cabania = reserva.cabania.precio
+            entrada = reserva.diaEntrada
+            salida = reserva.diaSalida
+            senia = reserva.seña  
 
-        cantidad_dias = (salida - entrada).days 
+            cantidad_dias = (salida - entrada).days
+            total_cabania = cabania + (precio*personas) * cantidad_dias - senia
 
-        total_cabania = cabania * 2
+            # Accede directamente al formset desde self.request.POST
+            total_servicios = self.total_servicios(formReserva.ReservaServicioFormset(self.request.POST))
 
-        total_servicios = 0
-
-        formset = formReserva.ReservaServicioFormset(data=self.request.POST)
-
-                # Iterar sobre cada formulario en el formset
-        for servicio_form in formset.forms:
-            servicio_id = servicio_form.cleaned_data.get('servicio')
-            
-            # Verificar si se seleccionó un servicio
-            if servicio_id:
-                servicio = Servicio.objects.get(id=servicio_id)
-                total_servicios += servicio.precio
-
-        context = {
-            'reserva': reserva,
-            'cabania': cabania,
-            'cantidad_dias': cantidad_dias,
-            'total_cabania': total_cabania,
-            'total_servicios': total_servicios
-        }
-
-        return context
-        
-
+            return {
+                'reserva': reserva,
+                'cabania': cabania,
+                'cantidad_personas': personas,
+                'cantidad_dias': cantidad_dias,
+                'total_cabania': total_cabania,
+                'total_servicios': total_servicios,
+                'total_servicios': total_servicios
+            }
+        else:
+            return {}
 
 class modif_reserva(LoginRequiredMixin, UpdateView):
     model = Reserva
@@ -453,20 +438,20 @@ class modif_reserva(LoginRequiredMixin, UpdateView):
 
         
     def total(self):
-        reserva = self.object
+        reserva=self.object
+        precio= reserva.cabania.precio_pers
         cabania = reserva.cabania.precio
-
+        personas= reserva.cant_personas
         entrada = reserva.diaEntrada #dia entrada
         salida = reserva.diaSalida  #dia salida
+        senia = reserva.seña  
+        servicio= reserva.Servicio.precio
 
         cantidad_dias = (salida - entrada).days #calculo de la diferencia entre dia de entrada y salida
+ 
+        total_cabania = cabania + (precio*personas) * cantidad_dias - senia #calculo entre el precio de la cabaña y la cantidad de dias
 
-        total_cabania = cabania * cantidad_dias #calculo entre el precio de la cabaña y la cantidad de dias
-
-        total_servicios = 0 #calculo sobre el total de servicios
-
-
-        total_servicios = 0
+        total_servicios = servicio * personas #calculo sobre el total de servicios
         reserva_servicios = ReservaServicio.objects.filter(reserva=reserva)
 
                 # Iterar sobre cada formulario en el formset
@@ -518,6 +503,8 @@ def Logout(request):
     return redirect('/')
 
 
+from datetime import datetime
+
 class Hospedaje(View):
     template_name = 'hospedaje.html'
 
@@ -527,49 +514,43 @@ class Hospedaje(View):
 
         # Verifica la disponibilidad de cada cabaña
         disponibilidad_cabañas = []
-        today = date.today()
+        today = datetime.now().date()
+
         for cabaña in cabañas:
             # Obtén todas las reservas para la cabaña
-            reservas_cabaña = Reserva.objects.filter(cabania=cabaña)
+            reservas_cabaña = Reserva.objects.filter(cabania=cabaña).order_by('diaEntrada')
 
-            # Verifica si la cabaña está ocupada en alguna de las reservas existentes
-            ocupada = any(
-                reserva.diaEntrada <= today <= reserva.diaSalida or
+            # Verifica si la cabaña está actualmente ocupada
+            cabaña_ocupada = any(
                 reserva.diaEntrada <= today <= reserva.diaSalida
                 for reserva in reservas_cabaña
             )
 
-            # Obtiene las fechas de ocupación y el cliente asociado a la última reserva
-            fechas_ocupacion = [
-                {'diaEntrada': reserva.diaEntrada, 'diaSalida': reserva.diaSalida, 'cliente': reserva.cliente}
-                for reserva in reservas_cabaña
-            ]
-
-            # Calcula las fechas de disponibilidad
-            fechas_libres = [fecha['diaSalida'] for fecha in fechas_ocupacion if fecha['diaSalida'] > today]
-            if fechas_libres:
-                ultima_fecha_salida = min(fechas_libres)
+            # Si la cabaña no está ocupada actualmente, muestra detalles de disponibilidad para la cabaña
+            if not cabaña_ocupada:
+                disponibilidad_cabañas.append({
+                    'cabaña': cabaña,
+                    'disponible': True,  # Si no está ocupada actualmente, entonces está disponible
+                    'dia_entrada': None,
+                    'dia_salida': None,
+                    'nombre_cliente': None,
+                })
             else:
-                ultima_fecha_salida = None
+                # Si está ocupada actualmente, entonces no está disponible
+                reserva_actual = next(
+                    (reserva for reserva in reservas_cabaña if reserva.diaEntrada <= today <= reserva.diaSalida),
+                    None
+                )
 
-            fechas_proximas = [fecha['diaEntrada'] for fecha in fechas_ocupacion if fecha['diaEntrada'] > today]
-            if fechas_proximas:
-                ultima_fecha_entrada = min(fechas_proximas)
-            else:
-                ultima_fecha_entrada = None
+                disponibilidad_cabañas.append({
+                    'cabaña': cabaña,
+                    'disponible': False,
+                    'dia_entrada': reserva_actual.diaEntrada if reserva_actual else None,
+                    'dia_salida': reserva_actual.diaSalida if reserva_actual else None,
+                    'nombre_cliente': reserva_actual.cliente.apellido_nombre if reserva_actual else None,
+                })
 
-            # Agrega la cabaña, su disponibilidad y las fechas de ocupación a la lista
-            disponibilidad_cabañas.append({
-                'cabaña': cabaña,
-                'disponible': not ocupada,
-                'fechas_ocupacion': fechas_ocupacion,
-                'disponible_desde': ultima_fecha_salida,
-                'disponible_hasta': ultima_fecha_entrada
-            })
-
-        # Pasa la lista de disponibilidad al contexto del template
-        context = {'disponibilidad_cabañas': disponibilidad_cabañas}
-        return render(request, self.template_name, context)
+        return render(request, self.template_name, {'disponibilidad_cabañas': disponibilidad_cabañas})
 
 '''
 from reportlab.pdfbase import pdfmetrics
@@ -717,13 +698,17 @@ def factura(request, reserva_id):
         top_margin -= line_height
 
     # Cálculos de precios y total de reserva
+    precio= reserva.cabania.precio_pers
+    personas= reserva.cant_personas
+    senia = reserva.seña  
+    servicio= reserva.servicio.precio
     cabania = reserva.cabania.precio
     entrada = reserva.diaEntrada
     salida = reserva.diaSalida
     cantidad_dias = (salida - entrada).days
-    total_cabania = cabania * cantidad_dias
+    total_cabania = cabania + (precio*personas) * cantidad_dias - senia #calculo entre el precio de la cabaña y la cantidad de dias
 
-    total_servicios = 0
+    total_servicios = servicio * personas #calculo sobre el total de servicios
     reserva_servicios = ReservaServicio.objects.filter(reserva=reserva)
 
     for reserva_servicio in reserva_servicios:
@@ -744,8 +729,6 @@ def factura(request, reserva_id):
 
     return FileResponse(buf, as_attachment=True, filename=f'reserva{reserva_id}_factura.pdf')
 
-
-from django.http import JsonResponse
 
 def search_clients(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':

@@ -24,7 +24,8 @@
                 <th>Nombre</th>
                 <th>Tipo</th>
                 <th>Capacidad</th>
-                <th>Precio</th>
+                <th>Precio Base</th>
+                <th>Precio por Persona</th>
                 <th>Complejo</th>
             </tr>       
         </thead>
@@ -35,6 +36,7 @@
                 <td>{{ cabania.tipo }}</td>
                 <td>{{ cabania.capacidad }}</td>
                 <td>{{ cabania.precio }}</td>
+                <td>{{ cabania.precio_pers }}</td>
                 <td>{{ cabania.complejo }}</td>
                 <td class="d-flex justify-content-end align-items-end"><a class="botonSecundario" href="/cabanias/cabaniaModif/{{ cabania.id }}"> Modificar</td>
                 <td><a class="botonSecundario" href="/cabanias/cabaniaBorrar/{{ cabania.id }}">Borrar</a></td>

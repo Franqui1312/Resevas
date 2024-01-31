@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Cliente(models.Model):
-    dni = models.IntegerField()
+    dni = models.IntegerField(default=0)
     apellido_nombre = models.CharField(max_length=100)
     telefono = models.CharField(max_length=30)
     email = models.CharField(max_length=50, default="user@gmail.com")
@@ -15,7 +15,7 @@ class Cliente(models.Model):
         return self.apellido_nombre
 
 class Encargado(models.Model):
-    dni = models.IntegerField()
+    dni = models.IntegerField(default=0)
     apellido_nombre = models.CharField(max_length=100)
     telefono = models.CharField(max_length=30)
     email = models.CharField(max_length=50, default="user@gmail.com")
@@ -35,8 +35,10 @@ class Complejo(models.Model):
 class Cabania(models.Model):
     nombre = models.CharField(max_length=100)
     tipo = models.CharField(max_length=15, choices=[('Apart','Apart'), ('Cabaña', 'Cabaña'), ('Departamento','Departamento'), ('Habitacion','Habitacion')])
-    capacidad = models.CharField(max_length=2)
-    precio = models.FloatField(max_length=10)
+    capacidad = models.IntegerField(default=0)
+    precio_pers= models.FloatField(default=0)
+    precio = models.FloatField(default=0)
+    servicio_incluido= models.CharField(default="ninguno",max_length=100)
     complejo = models.ForeignKey(Complejo, on_delete=models.CASCADE, default="none")
 
     def __str__(self):
@@ -45,7 +47,7 @@ class Cabania(models.Model):
 class Servicio(models.Model):
     nombre = models.CharField(max_length=20)
     descripcion = models.CharField(default="ninguna", max_length=150)
-    precio = models.FloatField(default=0, max_length=20)
+    precio = models.FloatField()
 
     def __str__(self):
         return self.nombre
@@ -53,9 +55,11 @@ class Reserva(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     complejo = models.ForeignKey(Complejo, on_delete=models.CASCADE)
     cabania = models.ForeignKey(Cabania, on_delete=models.CASCADE, default=None)
+    cant_personas = models.IntegerField(default=0)
+    servicio= models.ForeignKey(Servicio, on_delete=models.CASCADE, default=None)
     diaEntrada = models.DateField()
     diaSalida = models.DateField()
-    seña = models.FloatField(default=0, max_length=12)
+    seña = models.FloatField(default=0)
 
     def __str__(self):
         return self.cliente.apellido_nombre

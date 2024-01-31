@@ -1,59 +1,42 @@
+{% extends 'base.html' %}
+
 {% block content %}
+    {% include 'navbar.html' %}
 
-{% include 'navbar.html' %}
-
-<div class="contenedor">
-    <div class="row">
-        <h2 class="col display-4 my-3">Disponibilidad de Cabañas</h2>
-        <div class="col d-flex justify-content-end align-items-end mb-3">
-            <form method="GET">
-                <div class="input-group">
-                    <input type="text" id="search" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar Reserva...">
-                    <button class="lupa" type="submit"><span class="material-symbols-outlined">search</span></button>
-                </div>
-            </form>
+    <div class="contenedor">
+        <div class="row">
+            <h2 class="col display-4 my-3">Disponibilidad de Cabañas</h2>
+            <div class="col d-flex justify-content-end align-items-end mb-3">
+                <form method="GET">
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar Reserva...">
+                        <button class="lupa" type="submit"><span class="material-symbols-outlined">search</span></button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <table class="table table-striped table-hover" id="results">
-        <thead>
-            <tr>
-                <th>Complejo</th>
-                <th>Cabaña</th>
-                <th>Cliente</th>
-                <th>Día de Entrada</th>
-                <th>Día de Salida</th>
-                <th>Disponibilidad</th>
-                <th>Disponible desde</th>
-                <th>Disponible hasta</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for reserva_info in disponibilidad_cabañas %}
+        <table class="table table-striped table-hover" id="results">
+            <thead>
                 <tr>
-                    <td>{{ reserva_info.cabaña.complejo.nombre }}</td>
-                    <td>{{ reserva_info.cabaña.nombre }}</td>
-                    {% if not reserva_info.disponible %}
-                        {% with ultima_fecha_ocupacion=reserva_info.fechas_ocupacion|last %}
-                            <td>{% if not reserva_info.disponible and reserva_info.fechas_ocupacion %}{{ ultima_fecha_ocupacion.cliente.apellido_nombre }}{% else %}Nulo{% endif %}</td>
-                            <td>{{ ultima_fecha_ocupacion.diaEntrada }}</td>
-                            <td>{{ ultima_fecha_ocupacion.diaSalida }}</td>
-                            <td>No Disponible</td>
-                            <td>{{ reserva_info.disponible_desde }}</td>
-                            <td>{{ reserva_info.disponible_hasta }}</td>
-                        {% endwith %}
-                    {% else %}
-                        <td>-----</td>
-                        <td>-----</td>
-                        <td>-----</td>
-                        <td>Disponible</td>
-                        <td>None</td>
-                        <td>None</td>
-                    {% endif %}
+                    <th>Cabaña</th>
+                    <th>Disponibilidad</th>
+                    <th>Día de Entrada</th>
+                    <th>Día de Salida</th>
+                    <th>Nombre del Cliente</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
+            </thead>
+            <tbody>
+                {% for reserva_info in disponibilidad_cabañas %}
+                    <tr>
+                        <td>{{ reserva_info.cabaña.nombre }}</td>
+                        <td>{% if reserva_info.disponible %}Disponible{% else %}No Disponible{% endif %}</td>
+                        <td>{% if reserva_info.dia_entrada %}{{ reserva_info.dia_entrada }}{% else %}-----{% endif %}</td>
+                        <td>{% if reserva_info.dia_salida %}{{ reserva_info.dia_salida }}{% else %}-----{% endif %}</td>
+                        <td>{% if reserva_info.nombre_cliente %}{{ reserva_info.nombre_cliente }}{% else %}-----{% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
